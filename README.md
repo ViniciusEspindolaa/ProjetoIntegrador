@@ -109,4 +109,4 @@ Este frontend consome a API REST do PetFinder Backend. Certifique-se de que o ba
 
 ---
 
-Desenvolvido como parte do TCC - Sistema de Localização de Pets.
+Desenvolvido como parte da disciplina de Projeto de Desenvolvimento I, da UniSenac Pelotas.
