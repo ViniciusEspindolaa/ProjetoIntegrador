@@ -35,11 +35,13 @@ import {
   CommandSeparator,
 } from "@/components/ui/command"
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { Plus, Search, Check, ChevronsUpDown } from 'lucide-react'
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Plus, Search, Check, ChevronsUpDown, Activity, CheckCircle, Eye, ArrowUpDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export default function HomePage() {
@@ -50,6 +52,8 @@ export default function HomePage() {
   const [filteredPets, setFilteredPets] = useState<Pet[]>([])
   const [isLoadingPets, setIsLoadingPets] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [sortBy, setSortBy] = useState('recent')
+  const [stats, setStats] = useState<{ publicacoes: number, avistamentos: number, resolvidos: number } | null>(null)
   
   // Changed to arrays for multi-select
   const [statusFilters, setStatusFilters] = useState<PetStatus[]>([])
@@ -65,9 +69,7 @@ export default function HomePage() {
   const [selectedPetForReport, setSelectedPetForReport] = useState<Pet | null>(null)
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/login')
-    }
+    // Removed redirect to login
   }, [user, isLoading, router])
 
   // Load publicacoes from API
@@ -86,6 +88,24 @@ export default function HomePage() {
         console.error('Failed to load publicacoes', err)
       } finally {
         setIsLoadingPets(false)
+      }
+
+      // Load stats
+      try {
+        const statsData: any = await apiFetch('/api/dashboard/gerais')
+        if (mounted) {
+          // Calculate resolved from publicacoes_por_status if available, or use a separate endpoint if needed
+          // The dashboard/gerais returns publicacoes_por_status array
+          const resolvidos = statsData.publicacoes_por_status?.find((s: any) => s.status === 'RESOLVIDO')?._count.status || 0
+          
+          setStats({
+            publicacoes: statsData.publicacoes || 0,
+            avistamentos: statsData.avistamentos || 0,
+            resolvidos: resolvidos
+          })
+        }
+      } catch (err) {
+        console.error('Failed to load stats', err)
       }
     }
 
@@ -136,8 +156,35 @@ export default function HomePage() {
       )
     }
 
-    setFilteredPets(filtered)
-  }, [searchQuery, statusFilters, typeFilters, cityFilters, neighborhoodFilters, pets])
+    // Sort
+    // Create a copy before sorting to ensure immutability and state update detection
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case 'recent':
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        case 'oldest':
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        case 'sightings':
+          return (b.sightings?.length || 0) - (a.sightings?.length || 0)
+        case 'interactions':
+          const lastInteractionA = Math.max(
+            new Date(a.createdAt).getTime(),
+            ...(a.sightings || []).map(s => new Date(s.createdAt).getTime())
+          )
+          const lastInteractionB = Math.max(
+            new Date(b.createdAt).getTime(),
+            ...(b.sightings || []).map(s => new Date(s.createdAt).getTime())
+          )
+          return lastInteractionB - lastInteractionA
+        case 'reward':
+          return (b.reward || 0) - (a.reward || 0)
+        default:
+          return 0
+      }
+    })
+
+    setFilteredPets(sorted)
+  }, [searchQuery, statusFilters, typeFilters, cityFilters, neighborhoodFilters, pets, sortBy])
 
   const handleViewMap = (pet: Pet) => {
     router.push(`/map?petId=${pet.id}`)
@@ -231,7 +278,24 @@ export default function HomePage() {
             />
           </div>
 
-          <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0">
+          <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0 items-center">
+            {/* Sort Dropdown */}
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="h-9 w-[160px] text-xs sm:text-sm border-dashed">
+                <ArrowUpDown className="mr-2 h-4 w-4" />
+                <SelectValue placeholder="Ordenar por" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="recent">Mais recentes</SelectItem>
+                <SelectItem value="oldest">Mais antigos</SelectItem>
+                <SelectItem value="sightings">Mais avistamentos</SelectItem>
+                <SelectItem value="interactions">Últimas interações</SelectItem>
+                <SelectItem value="reward">Maior recompensa</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Separator orientation="vertical" className="h-6 mx-1" />
+
             {/* Status Filter */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -241,21 +305,12 @@ export default function HomePage() {
                   {statusFilters.length > 0 && (
                     <>
                       <Separator orientation="vertical" className="mx-2 h-4" />
-                      <Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
-                        {statusFilters.length}
-                      </Badge>
-                      <div className="hidden space-x-1 lg:flex">
-                        {statusFilters.length > 2 ? (
-                          <Badge variant="secondary" className="rounded-sm px-1 font-normal">
-                            {statusFilters.length} selecionados
+                      <div className="flex space-x-1">
+                        {statusFilters.map((option) => (
+                          <Badge variant="secondary" key={option} className="rounded-sm px-1 font-normal">
+                            {option === 'lost' ? 'Perdido' : option === 'found' ? 'Encontrado' : 'Adoção'}
                           </Badge>
-                        ) : (
-                          statusFilters.map((option) => (
-                            <Badge variant="secondary" key={option} className="rounded-sm px-1 font-normal">
-                              {option === 'lost' ? 'Perdido' : option === 'found' ? 'Encontrado' : 'Adoção'}
-                            </Badge>
-                          ))
-                        )}
+                        ))}
                       </div>
                     </>
                   )}
@@ -303,21 +358,12 @@ export default function HomePage() {
                   {typeFilters.length > 0 && (
                     <>
                       <Separator orientation="vertical" className="mx-2 h-4" />
-                      <Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
-                        {typeFilters.length}
-                      </Badge>
-                      <div className="hidden space-x-1 lg:flex">
-                        {typeFilters.length > 2 ? (
-                          <Badge variant="secondary" className="rounded-sm px-1 font-normal">
-                            {typeFilters.length} selecionados
+                      <div className="flex space-x-1">
+                        {typeFilters.map((option) => (
+                          <Badge variant="secondary" key={option} className="rounded-sm px-1 font-normal">
+                            {option === 'dog' ? 'Cachorro' : option === 'cat' ? 'Gato' : 'Outro'}
                           </Badge>
-                        ) : (
-                          typeFilters.map((option) => (
-                            <Badge variant="secondary" key={option} className="rounded-sm px-1 font-normal">
-                              {option === 'dog' ? 'Cachorro' : option === 'cat' ? 'Gato' : 'Outro'}
-                            </Badge>
-                          ))
-                        )}
+                        ))}
                       </div>
                     </>
                   )}
@@ -365,21 +411,12 @@ export default function HomePage() {
                   {cityFilters.length > 0 && (
                     <>
                       <Separator orientation="vertical" className="mx-2 h-4" />
-                      <Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
-                        {cityFilters.length}
-                      </Badge>
-                      <div className="hidden space-x-1 lg:flex">
-                        {cityFilters.length > 2 ? (
-                          <Badge variant="secondary" className="rounded-sm px-1 font-normal">
-                            {cityFilters.length} selecionados
+                      <div className="flex space-x-1">
+                        {cityFilters.map((option) => (
+                          <Badge variant="secondary" key={option} className="rounded-sm px-1 font-normal">
+                            {option}
                           </Badge>
-                        ) : (
-                          cityFilters.map((option) => (
-                            <Badge variant="secondary" key={option} className="rounded-sm px-1 font-normal">
-                              {option}
-                            </Badge>
-                          ))
-                        )}
+                        ))}
                       </div>
                     </>
                   )}
@@ -447,21 +484,12 @@ export default function HomePage() {
                   {neighborhoodFilters.length > 0 && (
                     <>
                       <Separator orientation="vertical" className="mx-2 h-4" />
-                      <Badge variant="secondary" className="rounded-sm px-1 font-normal lg:hidden">
-                        {neighborhoodFilters.length}
-                      </Badge>
-                      <div className="hidden space-x-1 lg:flex">
-                        {neighborhoodFilters.length > 2 ? (
-                          <Badge variant="secondary" className="rounded-sm px-1 font-normal">
-                            {neighborhoodFilters.length} selecionados
+                      <div className="flex space-x-1">
+                        {neighborhoodFilters.map((option) => (
+                          <Badge variant="secondary" key={option} className="rounded-sm px-1 font-normal">
+                            {option}
                           </Badge>
-                        ) : (
-                          neighborhoodFilters.map((option) => (
-                            <Badge variant="secondary" key={option} className="rounded-sm px-1 font-normal">
-                              {option}
-                            </Badge>
-                          ))
-                        )}
+                        ))}
                       </div>
                     </>
                   )}
@@ -536,6 +564,33 @@ export default function HomePage() {
                 onReport={setSelectedPetForReport}
               />
             ))}
+          </div>
+        )}
+
+        {/* Stats Footer */}
+        {stats && (
+          <div className="mt-8 grid grid-cols-3 gap-4 bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+            <div className="flex flex-col items-center justify-center text-center">
+              <div className="bg-blue-100 p-2 rounded-full mb-2">
+                <Activity className="w-5 h-5 text-blue-600" />
+              </div>
+              <span className="text-2xl font-bold text-gray-800">{stats.publicacoes}</span>
+              <span className="text-xs text-muted-foreground">Publicações</span>
+            </div>
+            <div className="flex flex-col items-center justify-center text-center border-l border-r border-gray-100">
+              <div className="bg-orange-100 p-2 rounded-full mb-2">
+                <Eye className="w-5 h-5 text-orange-600" />
+              </div>
+              <span className="text-2xl font-bold text-gray-800">{stats.avistamentos}</span>
+              <span className="text-xs text-muted-foreground">Avistamentos</span>
+            </div>
+            <div className="flex flex-col items-center justify-center text-center">
+              <div className="bg-green-100 p-2 rounded-full mb-2">
+                <CheckCircle className="w-5 h-5 text-green-600" />
+              </div>
+              <span className="text-2xl font-bold text-gray-800">{stats.resolvidos}</span>
+              <span className="text-xs text-muted-foreground">Resolvidos</span>
+            </div>
           </div>
         )}
       </main>

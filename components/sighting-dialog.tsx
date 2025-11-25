@@ -15,6 +15,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { MapPin, Calendar, Clock } from 'lucide-react'
+import dynamic from 'next/dynamic'
+import { useToast } from '@/hooks/use-toast'
+
+const SelectableMap = dynamic(() => import('@/components/selectable-map'), { ssr: false })
 
 interface SightingDialogProps {
   pet: Pet | null
@@ -25,28 +29,114 @@ interface SightingDialogProps {
 
 export function SightingDialog({ pet, open, onClose, onSubmit }: SightingDialogProps) {
   const { user } = useAuth()
+  const { toast } = useToast()
   const [location, setLocation] = useState('')
+  const [city, setCity] = useState('')
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
   const [description, setDescription] = useState('')
   const [reporterName, setReporterName] = useState('')
   const [reporterPhone, setReporterPhone] = useState('')
+  
+  const [mapLocation, setMapLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [isGettingLocation, setIsGettingLocation] = useState(false)
 
   useEffect(() => {
     if (open && user) {
       setReporterName(user.name || '')
       setReporterPhone(user.phone || '')
     }
+    // Reset map when opening
+    if (open) {
+      setMapLocation(null)
+      setLocation('')
+      setCity('')
+    }
   }, [open, user])
+
+  const handleGetCurrentLocation = () => {
+    setIsGettingLocation(true)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords
+          setMapLocation({ lat: latitude, lng: longitude })
+          setIsGettingLocation(false)
+          toast({
+            title: "Localização capturada",
+            description: `Coordenadas: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`,
+            duration: 3000,
+          })
+        },
+        (error) => {
+          setIsGettingLocation(false)
+          toast({
+            variant: "destructive",
+            title: "Erro de localização",
+            description: "Não foi possível obter sua localização. Verifique as permissões.",
+            duration: 3000,
+          })
+        }
+      )
+    } else {
+      setIsGettingLocation(false)
+      toast({
+        variant: "destructive",
+        title: "Erro",
+        description: "Geolocalização não é suportada pelo seu navegador.",
+        duration: 3000,
+      })
+    }
+  }
+
+  // Quando mapLocation mudar (click ou drag), faz reverse-geocoding
+  useEffect(() => {
+    const doReverse = async () => {
+      if (!mapLocation) return
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${mapLocation.lat}&lon=${mapLocation.lng}&format=json&addressdetails=1`)
+        const data = await res.json()
+        const a = data?.address || {}
+        
+        // Formatar endereço
+        const street = a.road || a.pedestrian || a.footway || a.cycleway || ''
+        const house = a.house_number || ''
+        const streetFull = house ? (street ? `${street}, ${house}` : house) : street
+        const neigh = a.neighbourhood || a.suburb || a.village || a.hamlet || ''
+        
+        let fullAddress = streetFull
+        if (neigh) fullAddress = fullAddress ? `${fullAddress} - ${neigh}` : neigh
+        
+        setLocation(fullAddress || data.display_name || '')
+        
+        const cityVal = a.city || a.town || a.village || a.county || a.state || ''
+        setCity(cityVal)
+      } catch (err) {
+        console.error('Erro no reverse geocoding', err)
+      }
+    }
+    doReverse()
+  }, [mapLocation])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!mapLocation) {
+      toast({
+        variant: "destructive",
+        title: "Localização necessária",
+        description: "Por favor, selecione a localização no mapa.",
+        duration: 3000,
+      })
+      return
+    }
+
     onSubmit({
       location: {
-        lat: -23.5505,
-        lng: -46.6333,
+        lat: mapLocation.lat,
+        lng: mapLocation.lng,
         address: location,
-        city: 'São Paulo',
+        city: city || 'Desconhecida',
       },
       date: new Date(date),
       time,
@@ -54,8 +144,11 @@ export function SightingDialog({ pet, open, onClose, onSubmit }: SightingDialogP
       reporterName,
       reporterPhone,
     })
+    
     // Reset form
     setLocation('')
+    setCity('')
+    setMapLocation(null)
     setDate('')
     setTime('')
     setDescription('')
@@ -76,14 +169,37 @@ export function SightingDialog({ pet, open, onClose, onSubmit }: SightingDialogP
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
+          
+          <div className="space-y-2">
+            <Label>Localização no Mapa *</Label>
+            <div className="border rounded-md overflow-hidden">
+              <SelectableMap
+                latitude={mapLocation?.lat ?? null}
+                longitude={mapLocation?.lng ?? null}
+                onChange={(lat, lng) => setMapLocation({ lat, lng })}
+                className="w-full h-48"
+              />
+            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleGetCurrentLocation}
+              disabled={isGettingLocation}
+              className="w-full text-xs"
+            >
+              <MapPin className="w-3 h-3 mr-2" />
+              {isGettingLocation ? 'Obtendo localização...' : 'Usar Minha Localização Atual'}
+            </Button>
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="location">
-              <MapPin className="w-4 h-4 inline mr-1" />
-              Local do avistamento
+              Endereço (preenchido automaticamente)
             </Label>
             <Input
               id="location"
-              placeholder="Rua, bairro ou ponto de referência"
+              placeholder="Selecione no mapa acima"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               required

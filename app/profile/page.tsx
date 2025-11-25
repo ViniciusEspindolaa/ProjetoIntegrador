@@ -9,6 +9,7 @@ import { apiFetch } from '@/lib/api'
 import { mapPublicacaoToPet } from '@/lib/api-mappers'
 import { MobileNav } from '@/components/mobile-nav'
 import { PetCard } from '@/components/pet-card'
+import { SightingCard } from '@/components/sighting-card'
 import { CompletePetDialog } from '@/components/complete-pet-dialog'
 import { ViewSightingsDialog } from '@/components/view-sightings-dialog'
 import { Button } from '@/components/ui/button'
@@ -90,7 +91,7 @@ export default function ProfilePage() {
                 city: '', 
               },
               date: new Date(s.data_avistamento),
-              time: new Date(s.data_avistamento).toLocaleTimeString(),
+              time: new Date(s.data_avistamento).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
               description: s.observacoes || '',
               reporterName: s.usuario?.nome || '',
               reporterPhone: s.usuario?.telefone || '',
@@ -149,19 +150,33 @@ export default function ProfilePage() {
     setCompletePetDialogOpen(true)
   }
 
-  const handlePetCompletion = (petId: string, reason: string) => {
-    // In a real app, this would make an API call
-    const updatedPets = userPets.map((pet) =>
-      pet.id === petId
-        ? { ...pet, completed: true, completionReason: reason, completedAt: new Date() }
-        : pet
-    )
-    setUserPets(updatedPets)
-    
-    toast({
-      title: 'Publicação finalizada!',
-      description: 'Sua publicação foi marcada como finalizada com sucesso.',
-    })
+  const handlePetCompletion = async (petId: string, reason: string) => {
+    try {
+      await apiFetch(`/api/publicacoes/${petId}/finalizar`, {
+        method: 'PATCH',
+        body: JSON.stringify({ motivo: reason })
+      })
+
+      // Update local state
+      const updatedPets = userPets.map((pet) =>
+        pet.id === petId
+          ? { ...pet, completed: true, completionReason: reason, completedAt: new Date() }
+          : pet
+      )
+      setUserPets(updatedPets)
+      
+      toast({
+        title: 'Publicação finalizada!',
+        description: 'Sua publicação foi marcada como finalizada com sucesso.',
+      })
+    } catch (error) {
+      console.error('Erro ao finalizar publicação:', error)
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível finalizar a publicação.',
+        variant: 'destructive'
+      })
+    }
   }
 
   const handleEditSighting = (sighting: any) => {
@@ -291,10 +306,35 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            <Button variant="outline" className="w-full mt-3 h-9 text-sm sm:h-10" onClick={() => router.push('/profile/edit')}>
-              <Edit className="w-4 h-4 mr-2" />
-              Editar Perfil
-            </Button>
+            <div className="flex gap-2 mt-3">
+              <Button 
+                variant="outline" 
+                className="flex-1 h-9 text-xs sm:text-sm sm:h-10 px-2" 
+                onClick={() => router.push('/profile/edit')}
+                title="Editar Perfil"
+              >
+                <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5" />
+                Editar
+              </Button>
+              <Button 
+                variant="outline" 
+                className="flex-1 h-9 text-xs sm:text-sm sm:h-10 px-2" 
+                onClick={() => router.push('/profile/settings')}
+                title="Configurações"
+              >
+                <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5" />
+                Config.
+              </Button>
+              <Button 
+                variant="outline" 
+                className="flex-1 h-9 text-xs sm:text-sm sm:h-10 px-2 text-red-600 hover:text-red-700 hover:bg-red-50" 
+                onClick={handleLogout}
+                title="Sair"
+              >
+                <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5" />
+                Sair
+              </Button>
+            </div>
           </CardContent>
         </Card>
 
@@ -323,7 +363,7 @@ export default function ProfilePage() {
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                 {userPets.map((pet) => (
                   <div key={pet.id} className="w-full">
                     <PetCard
@@ -334,7 +374,7 @@ export default function ProfilePage() {
                       isOwner={true}
                       onEdit={handleEditPet}
                       onComplete={handleCompletePet}
-                      compactMode={false}
+                      compactMode={true}
                     />
                   </div>
                 ))}
@@ -359,73 +399,21 @@ export default function ProfilePage() {
                 </CardContent>
               </Card>
             ) : (
-              userSightings.map((sighting) => (
-                <Card key={sighting.id}>
-                  <CardContent className="p-2.5">
-                    <div className="flex justify-between items-start">
-                      <div className="flex gap-2 mb-1.5">
-                        <div className="relative w-10 h-10 shrink-0 rounded-lg overflow-hidden">
-                          <Image
-                            src={sighting.pet.photoUrl || "/placeholder.svg"}
-                            alt={sighting.pet.name || 'Pet'}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-xs leading-tight">
-                            Avistamento de {sighting.pet.name || 'Pet'}
-                          </h4>
-                          <p className="text-[10px] text-muted-foreground">
-                            {new Date(sighting.date).toLocaleDateString('pt-BR')} às {sighting.time}
-                          </p>
-                          <p className="text-[10px] text-muted-foreground">
-                            Reportado {formatDistanceToNow(new Date(sighting.createdAt), { addSuffix: true, locale: ptBR })}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex gap-1">
-                        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handleEditSighting(sighting)}>
-                          <Edit className="w-3 h-3" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-6 w-6 text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDeleteSighting(sighting.id)}>
-                          <LogOut className="w-3 h-3" /> {/* Using LogOut icon as trash/delete for now or import Trash */}
-                        </Button>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-1 text-[11px] mb-1">
-                      <MapPin className="w-3 h-3 mt-0.5 text-muted-foreground shrink-0" />
-                      <span className="line-clamp-1">{sighting.location.address}</span>
-                    </div>
-                    <p className="text-[11px] text-muted-foreground line-clamp-2 leading-snug">{sighting.description}</p>
-                  </CardContent>
-                </Card>
-              ))
+              <div className="space-y-4">
+                {userSightings.map((sighting) => (
+                  <SightingCard
+                    key={sighting.id}
+                    sighting={sighting}
+                    onEdit={handleEditSighting}
+                    onDelete={handleDeleteSighting}
+                  />
+                ))}
+              </div>
             )}
           </TabsContent>
         </Tabs>
 
-        {/* Settings and Logout */}
-        <Card>
-          <CardContent className="p-2 sm:p-4 space-y-0.5">
-            <Button
-              variant="ghost"
-              className="w-full justify-start h-10 text-sm sm:h-12"
-              onClick={() => router.push('/profile/settings')}
-            >
-              <Settings className="w-4 h-4 mr-2.5" />
-              Configurações
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 h-10 text-sm sm:h-12"
-              onClick={handleLogout}
-            >
-              <LogOut className="w-4 h-4 mr-2.5" />
-              Sair
-            </Button>
-          </CardContent>
-        </Card>
+        {/* Settings and Logout removed from here */}
       </main>
 
       <CompletePetDialog

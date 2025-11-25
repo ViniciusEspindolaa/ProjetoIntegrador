@@ -167,7 +167,7 @@ export function SharePosterDialog({ pet, open, onClose }: SharePosterDialogProps
 
                 {pet.description && (
                   <div className="px-2">
-                    <p className="text-center text-base italic leading-relaxed" style={{ color: '#4b5563' }}>
+                    <p className="text-center text-sm italic leading-relaxed" style={{ color: '#4b5563' }}>
                       "{pet.description}"
                     </p>
                   </div>
@@ -201,6 +201,12 @@ export function SharePosterDialog({ pet, open, onClose }: SharePosterDialogProps
                     />
                   </div>
                 </div>
+
+                <div className="text-center pt-2">
+                  <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#9ca3af' }}>
+                    Veja mais no PetFinder • Escaneie o QR Code
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -219,21 +225,42 @@ export function SharePosterDialog({ pet, open, onClose }: SharePosterDialogProps
                 onClick={() => handleShare('whatsapp')}
                 className="bg-green-600 hover:bg-green-700 h-10 text-xs"
               >
-                <Share2 className="w-3 h-3 mr-1" />
+                <div className="relative w-4 h-4 mr-1">
+                  <Image 
+                    src="/wpplogo.webp" 
+                    alt="WhatsApp" 
+                    fill 
+                    className="object-contain brightness-0 invert" 
+                  />
+                </div>
                 WhatsApp
               </Button>
               <Button
                 onClick={() => handleShare('facebook')}
                 className="bg-blue-600 hover:bg-blue-700 h-10 text-xs"
               >
-                <Share2 className="w-3 h-3 mr-1" />
+                <div className="relative w-4 h-4 mr-1">
+                  <Image 
+                    src="/facebooklogo.webp" 
+                    alt="Facebook" 
+                    fill 
+                    className="object-contain brightness-0 invert" 
+                  />
+                </div>
                 Facebook
               </Button>
               <Button
                 onClick={() => handleShare('instagram')}
                 className="bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 h-10 text-xs"
               >
-                <Share2 className="w-3 h-3 mr-1" />
+                <div className="relative w-4 h-4 mr-1">
+                  <Image 
+                    src="/instagramlogo.png" 
+                    alt="Instagram" 
+                    fill 
+                    className="object-contain brightness-0 invert" 
+                  />
+                </div>
                 Instagram
               </Button>
             </div>

@@ -35,6 +35,7 @@ export default function NewPetPage() {
   const [breed, setBreed] = useState('')
   const [size, setSize] = useState<PetSize>('medium')
   const [age, setAge] = useState('')
+  const [ageUnit, setAgeUnit] = useState<'ANOS' | 'MESES'>('ANOS')
   const [location, setLocation] = useState('')
   const [city, setCity] = useState('')
   const [neighborhood, setNeighborhood] = useState('')
@@ -223,7 +224,10 @@ export default function NewPetPage() {
       if (breed) formData.append('raca', breed)
       if (size) formData.append('porte', porteMap[size] || '')
       if (sex) formData.append('sexo', sex)
-      if (age) formData.append('idade', age)
+      if (age) {
+        formData.append('idade', age)
+        formData.append('unidadeIdade', ageUnit)
+      }
       if (reward) formData.append('recompensa', reward)
       if (contactPhone) formData.append('telefone_contato', contactPhone)
       formData.append('data_evento', eventDate || new Date().toISOString())
@@ -438,13 +442,25 @@ export default function NewPetPage() {
 
               <div className="space-y-1.5">
                 <Label htmlFor="age" className="text-xs sm:text-sm">Idade (opcional)</Label>
-                <Input
-                  id="age"
-                  placeholder="Ex: 3 anos, 6 meses..."
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-                  className="h-9 text-sm"
-                />
+                <div className="flex gap-2">
+                  <Input
+                    id="age"
+                    type="number"
+                    placeholder="Ex: 3"
+                    value={age}
+                    onChange={(e) => setAge(e.target.value)}
+                    className="h-9 text-sm flex-1"
+                  />
+                  <Select value={ageUnit} onValueChange={(val) => setAgeUnit(val as 'ANOS' | 'MESES')}>
+                    <SelectTrigger className="w-[110px] h-9 text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ANOS">Anos</SelectItem>
+                      <SelectItem value="MESES">Meses</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
               <div className="space-y-1.5">

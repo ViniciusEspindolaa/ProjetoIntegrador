@@ -94,8 +94,8 @@ export function NotificationCenter() {
     }
     
     // Navegar para o recurso relacionado
-    if (n.dados?.publicacaoId) {
-      router.push(`/pet/${n.dados.publicacaoId}`)
+    if (n.dados?.publicacaoId || n.dados?.petId) {
+      router.push(`/pet/${n.dados.publicacaoId || n.dados.petId}`)
       setOpen(false)
     } else {
       // Fallback
@@ -114,7 +114,7 @@ export function NotificationCenter() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-96 bg-white border rounded-md shadow-lg z-50 flex flex-col">
+        <div className="fixed left-2 right-2 top-16 sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-2 sm:w-96 bg-white border rounded-md shadow-lg z-50 flex flex-col">
           <div className="px-3 py-2 border-b flex items-center justify-between bg-slate-50 rounded-t-md">
             <strong className="text-sm font-semibold">Notificações</strong>
             <div className="flex items-center gap-2">

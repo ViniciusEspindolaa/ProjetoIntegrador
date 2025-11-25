@@ -8,9 +8,10 @@ import { apiFetch } from './api'
 interface AuthContextType {
   user: User | null
   login: (email: string, password: string) => Promise<any>
-  loginWithGoogle: () => Promise<void>
+  loginWithGoogle: (idToken: string) => Promise<void>
   signup: (name: string, email: string, password: string, phone: string, lat?: number, lng?: number, address?: string, city?: string) => Promise<void>
   logout: () => void
+  updateCoordinates: (lat: number, lng: number) => Promise<void>
   isLoading: boolean
 }
 
@@ -38,6 +39,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     setIsLoading(false)
   }, [])
+
+  const updateCoordinates = async (lat: number, lng: number) => {
+    if (!user) return
+
+    try {
+      // Atualiza no Backend
+      await apiFetch(`/api/usuarios/${user.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ latitude: lat, longitude: lng })
+      })
+
+      // Atualiza estado local e localStorage
+      const updatedUser = {
+        ...user,
+        location: {
+          ...user.location,
+          lat,
+          lng
+        }
+      }
+      
+      setUser(updatedUser)
+      localStorage.setItem('user', JSON.stringify(updatedUser))
+    } catch (error) {
+      console.error('Erro ao atualizar coordenadas:', error)
+      // Não lançamos erro aqui para não interromper a navegação do usuário, 
+      // já que é uma atualização em background
+    }
+  }
 
   const login = async (email: string, password: string) => {
     setIsLoading(true)
@@ -73,18 +103,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const loginWithGoogle = async () => {
-    // Placeholder: implement OAuth flow when backend supports it.
-    const mockUser: User = {
-      id: 'google-1',
-      name: 'Usuario Google',
-      email: 'usuario@gmail.com',
-      phone: '+55 11 98765-4321',
-      photoUrl: '/user-profile-illustration.png',
-      createdAt: new Date(),
+  const loginWithGoogle = async (idToken: string) => {
+    setIsLoading(true)
+    try {
+      const res = await apiFetch('/api/auth/google', {
+        method: 'POST',
+        body: JSON.stringify({ idToken })
+      })
+
+      const userData: any = {
+        id: res.user.id,
+        name: res.user.name,
+        email: res.user.email,
+        phone: res.user.phone || '',
+        photoUrl: res.user.photoUrl || '/user-profile-illustration.png',
+        createdAt: new Date()
+      }
+
+      setUser(userData)
+      localStorage.setItem('user', JSON.stringify(userData))
+      if (res.token) localStorage.setItem('token', res.token)
+    } catch (error) {
+      throw error
+    } finally {
+      setIsLoading(false)
     }
-    setUser(mockUser)
-    localStorage.setItem('user', JSON.stringify(mockUser))
   }
 
   const signup = async (name: string, email: string, password: string, phone: string, lat?: number, lng?: number, address?: string, city?: string) => {
@@ -137,7 +180,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, loginWithGoogle, signup, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, login, loginWithGoogle, signup, logout, updateCoordinates, isLoading }}>
       {children}
     </AuthContext.Provider>
   )

@@ -64,7 +64,10 @@ function mapPublicacaoToPet(pub) {
                 neighborhood: ''
             },
             date: a.data_avistamento ? new Date(a.data_avistamento) : new Date(),
-            time: a.data_avistamento ? new Date(a.data_avistamento).toLocaleTimeString() : '',
+            time: a.data_avistamento ? new Date(a.data_avistamento).toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            }) : '',
             description: a.observacoes || '',
             reporterName: a.usuario?.nome || '',
             reporterPhone: a.usuario?.telefone || '',
@@ -79,6 +82,7 @@ function mapPublicacaoToPet(pub) {
         breed: pub.raca || '',
         size: mapPorte(pub.porte),
         age: pub.idade ? String(pub.idade) : undefined,
+        ageUnit: pub.unidadeIdade || 'ANOS',
         location: {
             lat: Number(pub.latitude),
             lng: Number(pub.longitude),
@@ -93,7 +97,9 @@ function mapPublicacaoToPet(pub) {
         contactPhone: pub.usuario?.telefone || '',
         contactName: pub.usuario?.nome || '',
         sightings,
-        createdAt: pub.data_publicacao ? new Date(pub.data_publicacao) : new Date()
+        createdAt: pub.data_publicacao ? new Date(pub.data_publicacao) : new Date(),
+        completed: pub.status === 'RESOLVIDO' || pub.status === 'RESGATADO',
+        completionReason: pub.motivo_encerramento || undefined
     };
     return pet;
 }
@@ -420,6 +426,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$textarea
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/map-pin.js [app-client] (ecmascript) <export default as MapPin>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/calendar.js [app-client] (ecmascript) <export default as Calendar>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/clock.js [app-client] (ecmascript) <export default as Clock>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$shared$2f$lib$2f$app$2d$dynamic$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/shared/lib/app-dynamic.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/hooks/use-toast.ts [app-client] (ecmascript)");
+;
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
@@ -431,34 +440,128 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
+;
+;
+const SelectableMap = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$shared$2f$lib$2f$app$2d$dynamic$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])(()=>__turbopack_context__.A("[project]/components/selectable-map.tsx [app-client] (ecmascript, next/dynamic entry, async loader)"), {
+    loadableGenerated: {
+        modules: [
+            "[project]/components/selectable-map.tsx [app-client] (ecmascript, next/dynamic entry)"
+        ]
+    },
+    ssr: false
+});
+_c = SelectableMap;
 function SightingDialog({ pet, open, onClose, onSubmit }) {
     _s();
     const { user } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$auth$2d$context$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"])();
+    const { toast } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useToast"])();
     const [location, setLocation] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
+    const [city, setCity] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [date, setDate] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [time, setTime] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [description, setDescription] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [reporterName, setReporterName] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
     const [reporterPhone, setReporterPhone] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
+    const [mapLocation, setMapLocation] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [isGettingLocation, setIsGettingLocation] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "SightingDialog.useEffect": ()=>{
             if (open && user) {
                 setReporterName(user.name || '');
                 setReporterPhone(user.phone || '');
             }
+            // Reset map when opening
+            if (open) {
+                setMapLocation(null);
+                setLocation('');
+                setCity('');
+            }
         }
     }["SightingDialog.useEffect"], [
         open,
         user
     ]);
+    const handleGetCurrentLocation = ()=>{
+        setIsGettingLocation(true);
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position)=>{
+                const { latitude, longitude } = position.coords;
+                setMapLocation({
+                    lat: latitude,
+                    lng: longitude
+                });
+                setIsGettingLocation(false);
+                toast({
+                    title: "Localização capturada",
+                    description: `Coordenadas: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`,
+                    duration: 3000
+                });
+            }, (error)=>{
+                setIsGettingLocation(false);
+                toast({
+                    variant: "destructive",
+                    title: "Erro de localização",
+                    description: "Não foi possível obter sua localização. Verifique as permissões.",
+                    duration: 3000
+                });
+            });
+        } else {
+            setIsGettingLocation(false);
+            toast({
+                variant: "destructive",
+                title: "Erro",
+                description: "Geolocalização não é suportada pelo seu navegador.",
+                duration: 3000
+            });
+        }
+    };
+    // Quando mapLocation mudar (click ou drag), faz reverse-geocoding
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "SightingDialog.useEffect": ()=>{
+            const doReverse = {
+                "SightingDialog.useEffect.doReverse": async ()=>{
+                    if (!mapLocation) return;
+                    try {
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${mapLocation.lat}&lon=${mapLocation.lng}&format=json&addressdetails=1`);
+                        const data = await res.json();
+                        const a = data?.address || {};
+                        // Formatar endereço
+                        const street = a.road || a.pedestrian || a.footway || a.cycleway || '';
+                        const house = a.house_number || '';
+                        const streetFull = house ? street ? `${street}, ${house}` : house : street;
+                        const neigh = a.neighbourhood || a.suburb || a.village || a.hamlet || '';
+                        let fullAddress = streetFull;
+                        if (neigh) fullAddress = fullAddress ? `${fullAddress} - ${neigh}` : neigh;
+                        setLocation(fullAddress || data.display_name || '');
+                        const cityVal = a.city || a.town || a.village || a.county || a.state || '';
+                        setCity(cityVal);
+                    } catch (err) {
+                        console.error('Erro no reverse geocoding', err);
+                    }
+                }
+            }["SightingDialog.useEffect.doReverse"];
+            doReverse();
+        }
+    }["SightingDialog.useEffect"], [
+        mapLocation
+    ]);
     const handleSubmit = (e)=>{
         e.preventDefault();
+        if (!mapLocation) {
+            toast({
+                variant: "destructive",
+                title: "Localização necessária",
+                description: "Por favor, selecione a localização no mapa.",
+                duration: 3000
+            });
+            return;
+        }
         onSubmit({
             location: {
-                lat: -23.5505,
-                lng: -46.6333,
+                lat: mapLocation.lat,
+                lng: mapLocation.lng,
                 address: location,
-                city: 'São Paulo'
+                city: city || 'Desconhecida'
             },
             date: new Date(date),
             time,
@@ -468,6 +571,8 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
         });
         // Reset form
         setLocation('');
+        setCity('');
+        setMapLocation(null);
         setDate('');
         setTime('');
         setDescription('');
@@ -488,7 +593,7 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                             children: "Reportar Avistamento"
                         }, void 0, false, {
                             fileName: "[project]/components/sighting-dialog.tsx",
-                            lineNumber: 73,
+                            lineNumber: 166,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DialogDescription"], {
@@ -499,13 +604,13 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/sighting-dialog.tsx",
-                            lineNumber: 74,
+                            lineNumber: 167,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/sighting-dialog.tsx",
-                    lineNumber: 72,
+                    lineNumber: 165,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -516,37 +621,86 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                             className: "space-y-2",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
-                                    htmlFor: "location",
+                                    children: "Localização no Mapa *"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/sighting-dialog.tsx",
+                                    lineNumber: 174,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "border rounded-md overflow-hidden",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SelectableMap, {
+                                        latitude: mapLocation?.lat ?? null,
+                                        longitude: mapLocation?.lng ?? null,
+                                        onChange: (lat, lng)=>setMapLocation({
+                                                lat,
+                                                lng
+                                            }),
+                                        className: "w-full h-48"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/sighting-dialog.tsx",
+                                        lineNumber: 176,
+                                        columnNumber: 15
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/components/sighting-dialog.tsx",
+                                    lineNumber: 175,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                    type: "button",
+                                    variant: "outline",
+                                    size: "sm",
+                                    onClick: handleGetCurrentLocation,
+                                    disabled: isGettingLocation,
+                                    className: "w-full text-xs",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__["MapPin"], {
-                                            className: "w-4 h-4 inline mr-1"
+                                            className: "w-3 h-3 mr-2"
                                         }, void 0, false, {
                                             fileName: "[project]/components/sighting-dialog.tsx",
-                                            lineNumber: 81,
+                                            lineNumber: 191,
                                             columnNumber: 15
                                         }, this),
-                                        "Local do avistamento"
+                                        isGettingLocation ? 'Obtendo localização...' : 'Usar Minha Localização Atual'
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/sighting-dialog.tsx",
-                                    lineNumber: 80,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
-                                    id: "location",
-                                    placeholder: "Rua, bairro ou ponto de referência",
-                                    value: location,
-                                    onChange: (e)=>setLocation(e.target.value),
-                                    required: true
-                                }, void 0, false, {
-                                    fileName: "[project]/components/sighting-dialog.tsx",
-                                    lineNumber: 84,
+                                    lineNumber: 183,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/sighting-dialog.tsx",
-                            lineNumber: 79,
+                            lineNumber: 173,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "space-y-2",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$label$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Label"], {
+                                    htmlFor: "location",
+                                    children: "Endereço (preenchido automaticamente)"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/sighting-dialog.tsx",
+                                    lineNumber: 197,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
+                                    id: "location",
+                                    placeholder: "Selecione no mapa acima",
+                                    value: location,
+                                    onChange: (e)=>setLocation(e.target.value),
+                                    required: true
+                                }, void 0, false, {
+                                    fileName: "[project]/components/sighting-dialog.tsx",
+                                    lineNumber: 200,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/sighting-dialog.tsx",
+                            lineNumber: 196,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -562,14 +716,14 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                                                     className: "w-4 h-4 inline mr-1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/sighting-dialog.tsx",
-                                                    lineNumber: 96,
+                                                    lineNumber: 212,
                                                     columnNumber: 17
                                                 }, this),
                                                 "Data"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/sighting-dialog.tsx",
-                                            lineNumber: 95,
+                                            lineNumber: 211,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -580,13 +734,13 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                                             required: true
                                         }, void 0, false, {
                                             fileName: "[project]/components/sighting-dialog.tsx",
-                                            lineNumber: 99,
+                                            lineNumber: 215,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/sighting-dialog.tsx",
-                                    lineNumber: 94,
+                                    lineNumber: 210,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -599,14 +753,14 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                                                     className: "w-4 h-4 inline mr-1"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/sighting-dialog.tsx",
-                                                    lineNumber: 109,
+                                                    lineNumber: 225,
                                                     columnNumber: 17
                                                 }, this),
                                                 "Hora"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/sighting-dialog.tsx",
-                                            lineNumber: 108,
+                                            lineNumber: 224,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -617,19 +771,19 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                                             required: true
                                         }, void 0, false, {
                                             fileName: "[project]/components/sighting-dialog.tsx",
-                                            lineNumber: 112,
+                                            lineNumber: 228,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/sighting-dialog.tsx",
-                                    lineNumber: 107,
+                                    lineNumber: 223,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/sighting-dialog.tsx",
-                            lineNumber: 93,
+                            lineNumber: 209,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -640,7 +794,7 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                                     children: "Descrição"
                                 }, void 0, false, {
                                     fileName: "[project]/components/sighting-dialog.tsx",
-                                    lineNumber: 123,
+                                    lineNumber: 239,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$textarea$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Textarea"], {
@@ -652,13 +806,13 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                                     rows: 3
                                 }, void 0, false, {
                                     fileName: "[project]/components/sighting-dialog.tsx",
-                                    lineNumber: 124,
+                                    lineNumber: 240,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/sighting-dialog.tsx",
-                            lineNumber: 122,
+                            lineNumber: 238,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -669,7 +823,7 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                                     children: "Seu nome"
                                 }, void 0, false, {
                                     fileName: "[project]/components/sighting-dialog.tsx",
-                                    lineNumber: 135,
+                                    lineNumber: 251,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -680,13 +834,13 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                                     required: true
                                 }, void 0, false, {
                                     fileName: "[project]/components/sighting-dialog.tsx",
-                                    lineNumber: 136,
+                                    lineNumber: 252,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/sighting-dialog.tsx",
-                            lineNumber: 134,
+                            lineNumber: 250,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -697,7 +851,7 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                                     children: "Seu telefone"
                                 }, void 0, false, {
                                     fileName: "[project]/components/sighting-dialog.tsx",
-                                    lineNumber: 146,
+                                    lineNumber: 262,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$input$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Input"], {
@@ -709,13 +863,13 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                                     required: true
                                 }, void 0, false, {
                                     fileName: "[project]/components/sighting-dialog.tsx",
-                                    lineNumber: 147,
+                                    lineNumber: 263,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/sighting-dialog.tsx",
-                            lineNumber: 145,
+                            lineNumber: 261,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -729,7 +883,7 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                                     children: "Cancelar"
                                 }, void 0, false, {
                                     fileName: "[project]/components/sighting-dialog.tsx",
-                                    lineNumber: 158,
+                                    lineNumber: 274,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -738,41 +892,43 @@ function SightingDialog({ pet, open, onClose, onSubmit }) {
                                     children: "Enviar Avistamento"
                                 }, void 0, false, {
                                     fileName: "[project]/components/sighting-dialog.tsx",
-                                    lineNumber: 161,
+                                    lineNumber: 277,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/sighting-dialog.tsx",
-                            lineNumber: 157,
+                            lineNumber: 273,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/sighting-dialog.tsx",
-                    lineNumber: 78,
+                    lineNumber: 171,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/sighting-dialog.tsx",
-            lineNumber: 71,
+            lineNumber: 164,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/sighting-dialog.tsx",
-        lineNumber: 70,
+        lineNumber: 163,
         columnNumber: 5
     }, this);
 }
-_s(SightingDialog, "pXmaI/zVZjsQn9OWyzJkEocfO9E=", false, function() {
+_s(SightingDialog, "XG3Ff9biip0fZNNmBM0rwQ3eQG4=", false, function() {
     return [
-        __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$auth$2d$context$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"]
+        __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$auth$2d$context$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAuth"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$hooks$2f$use$2d$toast$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useToast"]
     ];
 });
-_c = SightingDialog;
-var _c;
-__turbopack_context__.k.register(_c, "SightingDialog");
+_c1 = SightingDialog;
+var _c, _c1;
+__turbopack_context__.k.register(_c, "SelectableMap");
+__turbopack_context__.k.register(_c1, "SightingDialog");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
@@ -940,9 +1096,7 @@ function MapContent() {
     const [statusFilter, setStatusFilter] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('all');
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "MapContent.useEffect": ()=>{
-            if (!isLoading && !user) {
-                router.push('/login');
-            }
+        // Removed redirect to login
         }
     }["MapContent.useEffect"], [
         user,
@@ -1006,7 +1160,7 @@ function MapContent() {
                         className: "w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/app/map/page.tsx",
-                        lineNumber: 88,
+                        lineNumber: 86,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1014,18 +1168,18 @@ function MapContent() {
                         children: "Carregando..."
                     }, void 0, false, {
                         fileName: "[project]/app/map/page.tsx",
-                        lineNumber: 89,
+                        lineNumber: 87,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/map/page.tsx",
-                lineNumber: 87,
+                lineNumber: 85,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/map/page.tsx",
-            lineNumber: 86,
+            lineNumber: 84,
             columnNumber: 7
         }, this);
     }
@@ -1052,12 +1206,12 @@ function MapContent() {
                                         className: "w-6 h-6 sm:w-5 sm:h-5"
                                     }, void 0, false, {
                                         fileName: "[project]/app/map/page.tsx",
-                                        lineNumber: 111,
+                                        lineNumber: 109,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/map/page.tsx",
-                                    lineNumber: 105,
+                                    lineNumber: 103,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -1065,13 +1219,13 @@ function MapContent() {
                                     children: "Mapa de Pets"
                                 }, void 0, false, {
                                     fileName: "[project]/app/map/page.tsx",
-                                    lineNumber: 113,
+                                    lineNumber: 111,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/map/page.tsx",
-                            lineNumber: 104,
+                            lineNumber: 102,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1084,7 +1238,7 @@ function MapContent() {
                                     children: "Todos"
                                 }, void 0, false, {
                                     fileName: "[project]/app/map/page.tsx",
-                                    lineNumber: 117,
+                                    lineNumber: 115,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1094,7 +1248,7 @@ function MapContent() {
                                     children: "Perdidos"
                                 }, void 0, false, {
                                     fileName: "[project]/app/map/page.tsx",
-                                    lineNumber: 118,
+                                    lineNumber: 116,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1104,7 +1258,7 @@ function MapContent() {
                                     children: "Encontrados"
                                 }, void 0, false, {
                                     fileName: "[project]/app/map/page.tsx",
-                                    lineNumber: 119,
+                                    lineNumber: 117,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1114,36 +1268,38 @@ function MapContent() {
                                     children: "Adoção"
                                 }, void 0, false, {
                                     fileName: "[project]/app/map/page.tsx",
-                                    lineNumber: 120,
+                                    lineNumber: 118,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/map/page.tsx",
-                            lineNumber: 116,
+                            lineNumber: 114,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/map/page.tsx",
-                    lineNumber: 103,
+                    lineNumber: 101,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/map/page.tsx",
-                lineNumber: 102,
+                lineNumber: 100,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "flex-1 flex flex-col overflow-hidden pb-20 sm:pb-16",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex-1 transition-all",
+                    className: "flex-1 transition-all h-full",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "mx-4 sm:mx-0 border border-gray-200 rounded-lg shadow overflow-hidden max-h-[72vh] sm:max-h-[60vh] bg-white z-0",
+                        className: "h-full w-full bg-white z-0",
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(InteractiveMapClient, {
                             pets: pets,
                             selectedPetId: petId,
-                            onPetSelect: setSelectedPetForSighting,
+                            onPetSelect: (pet)=>router.push(`/map?petId=${pet.id}`),
+                            onReportSighting: setSelectedPetForSighting,
+                            onDeselect: ()=>router.push('/map'),
                             statusFilter: statusFilter,
                             userLocation: user?.location ? {
                                 lat: user.location.lat,
@@ -1151,22 +1307,22 @@ function MapContent() {
                             } : undefined
                         }, void 0, false, {
                             fileName: "[project]/app/map/page.tsx",
-                            lineNumber: 128,
+                            lineNumber: 126,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/map/page.tsx",
-                        lineNumber: 127,
+                        lineNumber: 125,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/map/page.tsx",
-                    lineNumber: 126,
+                    lineNumber: 124,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/map/page.tsx",
-                lineNumber: 125,
+                lineNumber: 123,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$sighting$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SightingDialog"], {
@@ -1187,7 +1343,7 @@ function MapContent() {
         ]
     }, void 0, true, {
         fileName: "[project]/app/map/page.tsx",
-        lineNumber: 100,
+        lineNumber: 98,
         columnNumber: 5
     }, this);
 }

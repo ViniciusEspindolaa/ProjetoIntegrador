@@ -5,5 +5,7 @@
   "/page": "app/page.js",
   "/pet/[id]/page": "app/pet/[id]/page.js",
   "/profile/page": "app/profile/page.js",
+  "/profile/settings/page": "app/profile/settings/page.js",
+  "/services/page": "app/services/page.js",
   "/signup/page": "app/signup/page.js"
 }

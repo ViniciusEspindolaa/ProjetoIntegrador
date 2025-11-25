@@ -50,7 +50,7 @@ export function mapPublicacaoToPet(pub: any): Pet {
       neighborhood: ''
     },
     date: a.data_avistamento ? new Date(a.data_avistamento) : new Date(),
-    time: a.data_avistamento ? new Date(a.data_avistamento).toLocaleTimeString() : '',
+    time: a.data_avistamento ? new Date(a.data_avistamento).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '',
     description: a.observacoes || '',
     reporterName: a.usuario?.nome || '',
     reporterPhone: a.usuario?.telefone || '',
@@ -66,6 +66,7 @@ export function mapPublicacaoToPet(pub: any): Pet {
     breed: pub.raca || '',
     size: mapPorte(pub.porte),
     age: pub.idade ? String(pub.idade) : undefined,
+    ageUnit: pub.unidadeIdade || 'ANOS',
     location: {
       lat: Number(pub.latitude),
       lng: Number(pub.longitude),
@@ -80,7 +81,9 @@ export function mapPublicacaoToPet(pub: any): Pet {
     contactPhone: pub.usuario?.telefone || '',
     contactName: pub.usuario?.nome || '',
     sightings,
-    createdAt: pub.data_publicacao ? new Date(pub.data_publicacao) : new Date()
+    createdAt: pub.data_publicacao ? new Date(pub.data_publicacao) : new Date(),
+    completed: pub.status === 'RESOLVIDO' || pub.status === 'RESGATADO',
+    completionReason: pub.motivo_encerramento || undefined
   }
 
   return pet

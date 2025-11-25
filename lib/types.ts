@@ -40,7 +40,9 @@ export interface Pet {
   type: PetType
   breed: string
   size: PetSize
-  age?: string
+  age?: string | number
+  ageUnit?: 'ANOS' | 'MESES'
+  unidadeIdade?: 'ANOS' | 'MESES' // Backend field name
   location: Location
   lastSeenDate: Date
   description: string

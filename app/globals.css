@@ -54,6 +54,28 @@
   --ring: #14b8a6;
 }
 
+.high-contrast {
+  --background: #ffffff;
+  --foreground: #000000;
+  --card: #ffffff;
+  --card-foreground: #000000;
+  --popover: #ffffff;
+  --popover-foreground: #000000;
+  --primary: #000000;
+  --primary-foreground: #ffffff;
+  --secondary: #ffffff;
+  --secondary-foreground: #000000;
+  --muted: #ffffff;
+  --muted-foreground: #000000;
+  --accent: #000000;
+  --accent-foreground: #ffffff;
+  --destructive: #b91c1c;
+  --destructive-foreground: #ffffff;
+  --border: #000000;
+  --input: #000000;
+  --ring: #000000;
+}
+
 @theme inline {
   --font-sans: 'Inter', 'Inter Fallback';
   
@@ -120,3 +142,17 @@ html {
 :focus-visible {
   @apply outline-2 outline-offset-2 outline-primary;
 }
+
+/* Leaflet Custom Icons */
+.custom-div-icon, .leaflet-marker-icon.custom-div-icon {
+  background: transparent !important;
+  border: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+}
+.custom-div-icon svg { width: 36px; height: 36px; display: block; }
+.leaflet-marker-icon { box-sizing: content-box; }

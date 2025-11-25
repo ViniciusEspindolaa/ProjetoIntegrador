@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Locate } from 'lucide-react'
 import L from 'leaflet'
 import { DirectionsDialog } from '@/components/directions-dialog'
+import { Eye } from 'lucide-react'
 
 // We dynamically inject Leaflet CSS at runtime to avoid Next.js global CSS restrictions
 // and to ensure the stylesheet is present only in the browser.
@@ -26,7 +27,17 @@ type Pet = {
   localizacao?: {
     latitude?: number
     longitude?: number
+    lat?: number
+    lng?: number
   }
+  location?: {
+    lat: number
+    lng: number
+    address?: string
+  }
+  photoUrl?: string
+  breed?: string
+  sightings?: any[]
 }
 
 function FlyToSelected({ lat, lng }: { lat?: number; lng?: number }) {
@@ -43,12 +54,18 @@ export default function LeafletMap({
   pets = [],
   selectedPetId,
   onPetSelect,
+  onReportSighting,
+  onViewDetails,
+  onDeselect,
   statusFilter = 'all',
   userLocation,
 }: {
   pets?: Pet[]
   selectedPetId?: string | null
   onPetSelect?: (p: Pet) => void
+  onReportSighting?: (p: Pet) => void
+  onViewDetails?: (p: Pet) => void
+  onDeselect?: () => void
   statusFilter?: 'all' | 'lost' | 'found' | 'adoption'
   userLocation?: { lat: number; lng: number }
 }) {
@@ -119,6 +136,23 @@ export default function LeafletMap({
     iconAnchor: [12, 12],
   })
 
+  const sightingIcon = L.divIcon({
+    html: `
+      <svg width="32" height="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <filter id="eyeShadow" x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000" flood-opacity="0.3" />
+        </filter>
+        <g filter="url(#eyeShadow)">
+          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" fill="#ffffff" />
+          <circle cx="12" cy="12" r="3" fill="#f59e0b" />
+        </g>
+      </svg>
+    `,
+    className: 'custom-div-icon sighting-icon',
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+  })
+
   const router = useRouter()
   const markers = useMemo(() => {
     return (pets || [])
@@ -138,6 +172,7 @@ export default function LeafletMap({
           photo,
           raw: p,
           status: p.status,
+          sightings: (p as any).sightings || []
         }
       })
       .filter((m) => !!m.lat && !!m.lng)
@@ -171,61 +206,6 @@ export default function LeafletMap({
   }, [markers, selectedPetId, userLocation])
 
   const selected = markers.find((m) => m.id === selectedPetId)
-
-  function LocationHandler() {
-    useMapEvents({
-      locationfound(e) {
-        setLiveLocation(e.latlng)
-        // map.flyTo(e.latlng, 16) is handled by locate({ setView: true }) or we can do it here
-      },
-    })
-    return null
-  }
-
-  function MapController() {
-    const map = useMap()
-    
-    // Center on user location button handler
-    const handleCenterOnUser = () => {
-      if (userLocation) {
-        map.flyTo([userLocation.lat, userLocation.lng], 16, { duration: 0.8 })
-      } else {
-        // Fallback to browser geolocation if no saved location
-        map.locate({ setView: true, maxZoom: 16, duration: 0.8 })
-      }
-    }
-
-    return (
-      <div className="leaflet-top leaflet-right" style={{ top: '20px', right: '10px' }}>
-        <div className="leaflet-control leaflet-bar">
-          <button
-            className="bg-white hover:bg-gray-100 text-gray-800 font-semibold px-3 py-2 border border-gray-400 rounded shadow flex items-center gap-2 h-auto"
-            onClick={handleCenterOnUser}
-            title="Centralizar na minha localização"
-            aria-label="Centralizar na minha localização"
-          >
-            <Locate className="w-4 h-4" />
-            <span className="text-sm font-medium">Minha localização</span>
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  // small presentational helper: legend row with a mini-pin svg
-  function LegendRow({ label, color }: { label: string; color: string }) {
-    return (
-      <div className="flex items-center gap-2">
-        <span className="inline-block" style={{ width: 18, height: 18 }}>
-          <svg width="18" height="18" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18 2 C12 2 8 6 8 12 C8 20 18 32 18 32 C18 32 28 20 28 12 C28 6 24 2 18 2 Z" fill={color} stroke="#ffffff" strokeWidth="1.2" />
-            <circle cx="18" cy="12" r="4" fill="#ffffff" />
-          </svg>
-        </span>
-        <span>{label}</span>
-      </div>
-    )
-  }
 
   return (
     <div className="w-full h-full relative">
@@ -264,60 +244,113 @@ export default function LeafletMap({
             popupAnchor: [0, -36]
           })
 
-          return (
-            <Marker key={m.id} position={[m.lat || 0, m.lng || 0]} icon={icon}>
-              <Popup>
-                <div style={{ maxWidth: 240 }}>
-                  <div className="flex items-start gap-3">
-                    <div className="shrink-0" style={{ width: 64 }}>
-                      {m.photo ? (
-                        <img src={m.photo} alt={m.nome} className="w-16 h-16 object-cover rounded" />
-                      ) : (
-                        <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center text-sm text-gray-500">Sem foto</div>
-                      )}
-                    </div>
-                    <div className="flex-1 text-sm">
-                      <div className="font-medium">{m.nome}</div>
-                      {m.raw?.breed && <div className="text-xs text-muted-foreground">{m.raw.breed}</div>}
-                      {m.raw?.location?.address && <div className="text-xs text-muted-foreground">{m.raw.location.address}</div>}
-                    </div>
-                  </div>
+          const isSelected = selectedPetId === m.id
 
-                  <div className="mt-2 flex justify-end gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="h-8 px-2 text-xs"
-                      onClick={() => {
-                        setDirectionsData({ lat: m.lat, lng: m.lng, address: m.raw?.location?.address })
-                      }}
-                    >
-                      Como chegar
-                    </Button>
-                    <Button
-                      size="sm"
-                      className="h-8 px-2 text-xs"
-                      onClick={() => {
-                        try {
-                          router.push(`/pet/${m.id}`)
-                        } catch (e) {
-                          // fallback to full navigation
-                          window.location.href = `/pet/${m.id}`
-                        }
-                      }}
-                    >
-                      Ver mais
-                    </Button>
+          return (
+            <React.Fragment key={m.id}>
+              <Marker 
+                position={[m.lat || 0, m.lng || 0]} 
+                icon={icon}
+                eventHandlers={{
+                  click: () => {
+                    if (onPetSelect && m.raw) onPetSelect(m.raw)
+                  }
+                }}
+              >
+                <Popup>
+                  <div style={{ maxWidth: 240 }}>
+                    <div className="flex items-start gap-3">
+                      <div className="shrink-0" style={{ width: 64 }}>
+                        {m.photo ? (
+                          <img src={m.photo} alt={m.nome} className="w-16 h-16 object-cover rounded" />
+                        ) : (
+                          <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center text-sm text-gray-500">Sem foto</div>
+                        )}
+                      </div>
+                      <div className="flex-1 text-sm">
+                        <div className="font-medium">{m.nome}</div>
+                        {m.raw?.breed && <div className="text-xs text-muted-foreground">{m.raw.breed}</div>}
+                        {m.raw?.location?.address && <div className="text-xs text-muted-foreground">{m.raw.location.address}</div>}
+                      </div>
+                    </div>
+
+                    <div className="mt-2 flex justify-end gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="h-8 px-2 text-xs"
+                        onClick={() => {
+                          setDirectionsData({ lat: m.lat || 0, lng: m.lng || 0, address: m.raw?.location?.address })
+                        }}
+                      >
+                        Como chegar
+                      </Button>
+                      {onReportSighting && m.status === 'lost' && (
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          className="h-8 px-2 text-xs"
+                          onClick={() => {
+                            if (m.raw) onReportSighting(m.raw)
+                          }}
+                        >
+                          Avistei!
+                        </Button>
+                      )}
+                      <Button
+                        size="sm"
+                        className="h-8 px-2 text-xs"
+                        onClick={() => {
+                          if (onViewDetails && m.raw) {
+                            onViewDetails(m.raw)
+                          } else {
+                            try {
+                              router.push(`/pet/${m.id}`)
+                            } catch (e) {
+                              // fallback to full navigation
+                              window.location.href = `/pet/${m.id}`
+                            }
+                          }
+                        }}
+                      >
+                        Ver mais
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </Popup>
-            </Marker>
+                </Popup>
+              </Marker>
+
+              {/* Render Sightings if this pet is selected */}
+              {isSelected && m.sightings && m.sightings.map((s: any) => (
+                <Marker
+                  key={`sighting-${s.id}`}
+                  position={[s.location.lat, s.location.lng]}
+                  icon={sightingIcon}
+                >
+                  <Popup>
+                    <div className="text-sm">
+                      <div className="font-bold flex items-center gap-1 mb-1">
+                        <Eye className="w-3 h-3" />
+                        Avistamento
+                      </div>
+                      <div className="text-xs text-muted-foreground mb-1">
+                        {new Date(s.date).toLocaleDateString()} às {s.time}
+                      </div>
+                      <div className="text-xs mb-2">{s.location.address}</div>
+                      <div className="text-xs italic">"{s.description}"</div>
+                    </div>
+                  </Popup>
+                </Marker>
+              ))}
+            </React.Fragment>
           )
         })}
 
         <FlyToSelected lat={selected?.lat} lng={selected?.lng} />
-        <MapController />
-        <LocationHandler />
+        <MapController userLocation={userLocation} />
+        <LocationHandler onLocationFound={setLiveLocation} />
+        <MapClickHandler onDeselect={onDeselect} />
+        <AutoCenter selectedPetId={selectedPetId} userLocation={userLocation} />
         
         {(userLocation || liveLocation) && (
           <Marker 
@@ -332,12 +365,21 @@ export default function LeafletMap({
       </MapContainer>
 
       {/* Legend overlay (visible on sm+, toggle button on xs) */}
-      <div className="absolute bottom-8 right-3 text-sm" style={{ zIndex: 99999 }}>
+      <div className="absolute bottom-24 right-3 text-sm" style={{ zIndex: 99999 }}>
         <div className="hidden sm:block bg-white/95 dark:bg-slate-900/95 text-gray-900 dark:text-gray-100 rounded shadow-md p-2 pointer-events-auto border border-gray-200 dark:border-slate-700">
           <div className="flex flex-col gap-1">
             <LegendRow label="Perdido" color={STATUS_COLORS.lost} />
             <LegendRow label="Encontrado" color={STATUS_COLORS.found} />
             <LegendRow label="Adoção" color={STATUS_COLORS.adoption} />
+            <div className="flex items-center gap-2">
+              <span className="inline-block" style={{ width: 18, height: 18 }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" fill="#ffffff" />
+                  <circle cx="12" cy="12" r="3" fill="#f59e0b" />
+                </svg>
+              </span>
+              <span>Avistamento</span>
+            </div>
           </div>
         </div>
         {/* Small screen toggle */}
@@ -358,7 +400,7 @@ export default function LeafletMap({
 
       {/* Small screen legend panel */}
       {legendOpen && (
-        <div className="absolute bottom-4 right-4 bg-white/95 dark:bg-slate-900/95 text-gray-900 dark:text-gray-100 rounded shadow-md p-3 w-40 border border-gray-200 dark:border-slate-700" style={{ zIndex: 99999 }}>
+        <div className="absolute bottom-24 right-4 bg-white/95 dark:bg-slate-900/95 text-gray-900 dark:text-gray-100 rounded shadow-md p-3 w-40 border border-gray-200 dark:border-slate-700" style={{ zIndex: 99999 }}>
           <div className="flex flex-col gap-2">
             <div className="flex justify-end">
               <button aria-label="Fechar legenda" onClick={() => setLegendOpen(false)} className="text-xs text-gray-600">Fechar</button>
@@ -366,6 +408,15 @@ export default function LeafletMap({
             <LegendRow label="Perdido" color={STATUS_COLORS.lost} />
             <LegendRow label="Encontrado" color={STATUS_COLORS.found} />
             <LegendRow label="Adoção" color={STATUS_COLORS.adoption} />
+            <div className="flex items-center gap-2">
+              <span className="inline-block" style={{ width: 18, height: 18 }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" fill="#ffffff" />
+                  <circle cx="12" cy="12" r="3" fill="#f59e0b" />
+                </svg>
+              </span>
+              <span>Avistamento</span>
+            </div>
           </div>
         </div>
       )}
@@ -377,6 +428,94 @@ export default function LeafletMap({
         lng={directionsData?.lng || 0} 
         address={directionsData?.address}
       />
+    </div>
+  )
+}
+
+// Helper components defined outside to prevent re-mounting on every render
+function LocationHandler({ onLocationFound }: { onLocationFound: (latlng: { lat: number; lng: number }) => void }) {
+  useMapEvents({
+    locationfound(e) {
+      onLocationFound(e.latlng)
+    },
+  })
+  return null
+}
+
+function MapClickHandler({ onDeselect }: { onDeselect?: () => void }) {
+  useMapEvents({
+    click(e) {
+      if (onDeselect) {
+        onDeselect()
+      }
+    }
+  })
+  return null
+}
+
+function MapController({ userLocation }: { userLocation?: { lat: number; lng: number } }) {
+  const map = useMap()
+  
+  const handleCenterOnUser = () => {
+    if (userLocation) {
+      map.flyTo([userLocation.lat, userLocation.lng], 16, { duration: 0.8 })
+    } else {
+      map.locate({ setView: true, maxZoom: 16 })
+    }
+  }
+
+  return (
+    <div className="leaflet-top leaflet-right" style={{ top: '20px', right: '10px' }}>
+      <div className="leaflet-control leaflet-bar">
+        <button
+          className="bg-white hover:bg-gray-100 text-gray-800 font-semibold px-3 py-2 border border-gray-400 rounded shadow flex items-center gap-2 h-auto"
+          onClick={handleCenterOnUser}
+          title="Centralizar na minha localização"
+          aria-label="Centralizar na minha localização"
+        >
+          <Locate className="w-4 h-4" />
+          <span className="text-sm font-medium">Minha localização</span>
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function AutoCenter({ selectedPetId, userLocation }: { selectedPetId?: string | null, userLocation?: { lat: number; lng: number } }) {
+  const map = useMap()
+  const hasCentered = React.useRef(false)
+
+  React.useEffect(() => {
+    if (hasCentered.current) return
+
+    if (selectedPetId) {
+      hasCentered.current = true
+      return
+    }
+
+    if (userLocation) {
+      map.setView([userLocation.lat, userLocation.lng], 14)
+      hasCentered.current = true
+    } else {
+      map.locate({ setView: true, maxZoom: 14 })
+      hasCentered.current = true
+    }
+  }, [map, selectedPetId, userLocation])
+
+  return null
+}
+
+// small presentational helper: legend row with a mini-pin svg
+function LegendRow({ label, color }: { label: string; color: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <span className="inline-block" style={{ width: 18, height: 18 }}>
+        <svg width="18" height="18" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 2 C12 2 8 6 8 12 C8 20 18 32 18 32 C18 32 28 20 28 12 C28 6 24 2 18 2 Z" fill={color} stroke="#ffffff" strokeWidth="1.2" />
+          <circle cx="18" cy="12" r="4" fill="#ffffff" />
+        </svg>
+      </span>
+      <span>{label}</span>
     </div>
   )
 }

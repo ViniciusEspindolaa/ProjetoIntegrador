@@ -9,7 +9,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { MessageCircle, Phone } from 'lucide-react'
+import { Phone, AlertTriangle } from 'lucide-react'
+import Image from 'next/image'
 
 interface ContactDialogProps {
   pet: Pet | null
@@ -45,14 +46,30 @@ export function ContactDialog({ pet, open, onClose }: ContactDialogProps) {
         </DialogHeader>
 
         <div className="space-y-3 pt-2">
+          {pet.reward && pet.reward > 0 && (
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4 flex gap-3 items-start">
+              <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+              <p className="text-xs text-amber-800 leading-tight text-left">
+                <strong>Atenção:</strong> O oferecimento e pagamento de recompensas é de inteira responsabilidade do anunciante. O PetFinder não intermedia pagamentos.
+              </p>
+            </div>
+          )}
+
           <Button
             onClick={handleWhatsApp}
             className="w-full h-12 bg-green-600 hover:bg-green-700"
           >
-            <MessageCircle className="w-5 h-5 mr-2" />
+            <div className="relative w-5 h-5 mr-2">
+              <Image
+                src="/wpplogo.webp"
+                alt="WhatsApp"
+                fill
+                className="object-contain brightness-0 invert"
+              />
+            </div>
             Falar por WhatsApp
           </Button>
-          
+
           <Button
             onClick={handleCall}
             variant="outline"

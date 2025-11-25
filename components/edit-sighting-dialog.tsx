@@ -15,6 +15,12 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { MapPin } from 'lucide-react'
+import dynamic from 'next/dynamic'
+
+const LocationPicker = dynamic(() => import('@/components/location-picker'), {
+  ssr: false,
+  loading: () => <div className="w-full h-[300px] bg-gray-100 animate-pulse rounded-lg" />
+})
 
 interface EditSightingDialogProps {
   sighting: Sighting | null
@@ -26,17 +32,23 @@ interface EditSightingDialogProps {
 export function EditSightingDialog({ sighting, open, onClose, onSave }: EditSightingDialogProps) {
   const [location, setLocation] = useState('')
   const [city, setCity] = useState('')
+  const [lat, setLat] = useState<number | undefined>(undefined)
+  const [lng, setLng] = useState<number | undefined>(undefined)
   const [date, setDate] = useState('')
   const [time, setTime] = useState('')
   const [description, setDescription] = useState('')
   const [reporterName, setReporterName] = useState('')
   const [reporterPhone, setReporterPhone] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLoadingAddress, setIsLoadingAddress] = useState(false)
 
   useEffect(() => {
     if (sighting) {
       setLocation(sighting.location.address)
       setCity(sighting.location.city)
+      // Ensure lat/lng are numbers
+      setLat(Number(sighting.location.lat))
+      setLng(Number(sighting.location.lng))
       setDate(new Date(sighting.date).toISOString().split('T')[0])
       setTime(sighting.time)
       setDescription(sighting.description)
@@ -44,6 +56,33 @@ export function EditSightingDialog({ sighting, open, onClose, onSave }: EditSigh
       setReporterPhone(sighting.reporterPhone)
     }
   }, [sighting])
+
+  const handleLocationSelect = async (newLat: number, newLng: number) => {
+    setLat(newLat)
+    setLng(newLng)
+    setIsLoadingAddress(true)
+    
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${newLat}&lon=${newLng}`)
+      const data = await response.json()
+      
+      if (data && data.address) {
+        const street = data.address.road || data.address.pedestrian || ''
+        const number = data.address.house_number || ''
+        const suburb = data.address.suburb || data.address.neighbourhood || ''
+        const cityVal = data.address.city || data.address.town || data.address.village || data.address.municipality || ''
+        
+        const fullAddress = [street, number, suburb].filter(Boolean).join(', ') || data.display_name
+        
+        setLocation(fullAddress)
+        setCity(cityVal)
+      }
+    } catch (error) {
+      console.error("Erro ao buscar endereço:", error)
+    } finally {
+      setIsLoadingAddress(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -57,6 +96,8 @@ export function EditSightingDialog({ sighting, open, onClose, onSave }: EditSigh
         ...sighting.location,
         address: location,
         city,
+        lat: lat || sighting.location.lat,
+        lng: lng || sighting.location.lng,
       },
       date: new Date(date),
       time,
@@ -82,7 +123,21 @@ export function EditSightingDialog({ sighting, open, onClose, onSave }: EditSigh
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="edit-location" className="text-sm">Local *</Label>
+            <Label className="text-sm">Localização no Mapa</Label>
+            <div className="rounded-lg overflow-hidden border border-gray-200">
+              <LocationPicker 
+                initialLat={lat} 
+                initialLng={lng} 
+                onLocationSelect={handleLocationSelect} 
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {isLoadingAddress ? 'Buscando endereço...' : 'Toque no mapa para ajustar a localização exata.'}
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="edit-location" className="text-sm">Endereço *</Label>
             <Input
               id="edit-location"
               value={location}

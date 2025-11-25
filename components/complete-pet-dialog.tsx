@@ -146,7 +146,11 @@ export function CompletePetDialog({ pet, open, onOpenChange, onComplete }: Compl
             >
               Cancelar
             </Button>
-            <Button type="submit" className="flex-1" disabled={!reasonType}>
+            <Button 
+              type="submit" 
+              className="flex-1 bg-green-600 hover:bg-green-700 text-white transition-colors" 
+              disabled={!reasonType}
+            >
               Finalizar
             </Button>
           </DialogFooter>

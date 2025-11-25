@@ -1,24 +1,17 @@
-'use client'
-
 import { useState } from 'react'
 import { Pet } from '@/lib/types'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Phone, Map, Eye, Share2, Flag, MapPin } from 'lucide-react'
+import { Phone, Map, Eye, Share2, Flag, MapPin, Edit, CheckCircle } from 'lucide-react'
 import Image from 'next/image'
+import { useAuth } from '@/lib/auth-context'
+import { useRouter } from 'next/navigation'
+import { useToast } from '@/hooks/use-toast'
 import { ContactDialog } from './contact-dialog'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog'
-import { InteractiveMap as InteractiveMapClient } from './interactive-map.client'
-import { DirectionsDialog } from '@/components/directions-dialog'
-import { formatDistanceToNow } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
+import { PetDetailDialog } from './pet-detail-dialog'
+import { ImageDialog } from './image-dialog'
+import { Maximize2 } from 'lucide-react'
 
 interface PetCardProps {
   pet: Pet
@@ -45,9 +38,12 @@ export function PetCard({
   onReport,
   compactMode = false
 }: PetCardProps) {
+  const { user } = useAuth()
+  const router = useRouter()
+  const { toast } = useToast()
   const [contactDialogOpen, setContactDialogOpen] = useState(false)
   const [detailOpen, setDetailOpen] = useState(false)
-  const [directionsOpen, setDirectionsOpen] = useState(false)
+  const [imageOpen, setImageOpen] = useState(false)
   
   const statusConfig = {
     lost: { label: 'Perdido', color: 'bg-red-500 text-white' },
@@ -65,10 +61,23 @@ export function PetCard({
 
   const displayName = getDisplayName()
 
+  const handleAction = (action: () => void) => {
+    if (!user) {
+      toast({
+        title: "Login necessário",
+        description: "Você precisa estar logado para realizar esta ação.",
+        variant: "destructive"
+      })
+      router.push('/login')
+      return
+    }
+    action()
+  }
+
   return (
     <>
       <Card onClick={() => setDetailOpen(true)} className="cursor-pointer w-full overflow-hidden hover:shadow-lg transition-shadow active:scale-[0.98] pt-0">
-        <div className={compactMode ? "relative h-40" : "relative aspect-[4/3] sm:aspect-square"}>
+        <div className={compactMode ? "relative h-40 bg-gray-100" : "relative aspect-4/3 sm:aspect-square bg-gray-100"}>
           <Image
             src={pet.photoUrl || "/placeholder.svg"}
             alt={displayName || 'Pet'}
@@ -87,6 +96,15 @@ export function PetCard({
               </Badge>
             )}
           </div>
+          
+          <button
+            onClick={(e) => { e.stopPropagation(); setImageOpen(true) }}
+            className="absolute bottom-2 left-2 p-1.5 rounded-full bg-black/30 hover:bg-black/50 text-white transition-colors z-10"
+            title="Ampliar foto"
+          >
+            <Maximize2 className="w-3.5 h-3.5" />
+          </button>
+
           {pet.reward && (
             <div className="absolute bottom-0 right-0 bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-tl-lg shadow-sm z-10">
               R$ {pet.reward}
@@ -168,16 +186,18 @@ export function PetCard({
                 onClick={(e) => { e.stopPropagation(); onEdit?.(pet) }}
                 disabled={pet.completed}
               >
-                {compactMode ? <span className="sr-only">Editar</span> : 'Editar'}
+                <Edit className="w-3 h-3 mr-1" />
+                <span>Editar</span>
               </Button>
               <Button
                 size="sm"
                 variant="secondary"
-                className={compactMode ? "text-[10px] h-6 px-1" : "text-xs h-8 px-2 sm:h-10"}
+                className={compactMode ? "text-[10px] h-6 px-1 hover:bg-green-600 hover:text-white transition-colors" : "text-xs h-8 px-2 sm:h-10 hover:bg-green-600 hover:text-white transition-colors"}
                 onClick={(e) => { e.stopPropagation(); onComplete?.(pet) }}
                 disabled={pet.completed}
               >
-                {!compactMode && 'Finalizar'}
+                <CheckCircle className="w-3 h-3 mr-1" />
+                <span>Finalizar</span>
               </Button>
             </div>
           ) : (
@@ -195,7 +215,10 @@ export function PetCard({
                 <Button
                   size="sm"
                   className={`${compactMode ? 'text-[10px] bg-green-600 hover:bg-green-700 h-6 px-1 w-full' : 'text-xs bg-green-600 hover:bg-green-700 h-8 px-2 sm:h-10 w-full'}`}
-                  onClick={(e) => { e.stopPropagation(); setContactDialogOpen(true) }}
+                  onClick={(e) => { 
+                    e.stopPropagation(); 
+                    handleAction(() => setContactDialogOpen(true)) 
+                  }}
                 >
                   <Phone className="w-3 h-3" />
                   {!compactMode && <span className="ml-1">Contato</span>}
@@ -204,8 +227,11 @@ export function PetCard({
                 <Button
                   size="sm"
                   variant="secondary"
-                  className={`${compactMode ? 'text-[10px] h-6 px-1 w-full' : 'text-xs h-8 px-2 sm:h-10 w-full'}`}
-                  onClick={(e) => { e.stopPropagation(); onReportSighting(pet) }}
+                  className={`${compactMode ? 'text-[10px] h-6 px-1 w-full' : 'text-xs h-8 px-2 sm:h-10 w-full'} hover:bg-green-600 hover:text-white transition-colors`}
+                  onClick={(e) => { 
+                    e.stopPropagation(); 
+                    handleAction(() => onReportSighting(pet)) 
+                  }}
                 >
                   <Eye className="w-3 h-3" />
                   {!compactMode && <span className="ml-1">Avistar</span>}
@@ -226,7 +252,10 @@ export function PetCard({
                   size="sm"
                   variant="ghost"
                   className={compactMode ? "text-[10px] h-6 px-1 text-muted-foreground hover:text-red-600" : "text-xs h-8 px-2 text-muted-foreground hover:text-red-600"}
-                  onClick={(e) => { e.stopPropagation(); onReport?.(pet) }}
+                  onClick={(e) => { 
+                    e.stopPropagation(); 
+                    handleAction(() => onReport?.(pet)) 
+                  }}
                 >
                   <Flag className="w-3 h-3" />
                   {!compactMode && <span className="ml-1">Denunciar</span>}
@@ -237,122 +266,13 @@ export function PetCard({
         </CardContent>
       </Card>
 
-      <Dialog open={detailOpen} onOpenChange={(open) => setDetailOpen(open)}>
-        <DialogContent className="max-w-3xl w-full max-h-[80vh] overflow-y-auto p-4">
-          <DialogHeader>
-            <DialogTitle>{displayName || `${pet.type}`}</DialogTitle>
-            <DialogDescription>
-              {pet.breed} • {pet.size === 'small' ? 'Pequeno' : pet.size === 'medium' ? 'Médio' : 'Grande'}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 pt-2">
-            <div className="w-full h-48 sm:h-64 relative rounded-lg overflow-hidden bg-gray-100">
-              <Image src={pet.photoUrl || '/placeholder.svg'} alt={displayName || 'Pet'} fill className="object-cover" />
-            </div>
-
-            <div className="grid grid-cols-1 gap-3">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className={`${statusConfig[pet.status].color} inline-flex items-center rounded-full text-[12px] px-2 py-0.5`}>
-                  {statusConfig[pet.status].label}
-                </span>
-                {pet.reward && <span className="inline-flex items-center rounded-full bg-amber-500 text-white text-[12px] px-2 py-0.5">R$ {pet.reward}</span>}
-                {pet.completed && <span className="inline-flex items-center rounded-full bg-gray-700 text-white text-[12px] px-2 py-0.5">Finalizado</span>}
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div>
-                  <h4 className="font-semibold">Informações</h4>
-                  <ul className="text-sm text-muted-foreground mt-1 space-y-1">
-                    <li><strong>Tipo:</strong> {pet.type === 'dog' ? 'Cachorro' : pet.type === 'cat' ? 'Gato' : 'Outro'}</li>
-                    {pet.age && <li><strong>Idade:</strong> {pet.age}</li>}
-                    <li><strong>Cidade:</strong> {pet.location.city}</li>
-                    {pet.location.neighborhood && <li><strong>Bairro:</strong> {pet.location.neighborhood}</li>}
-                    <li><strong>Endereço:</strong> {pet.location.address}</li>
-                    
-                    {pet.status === 'adoption' ? (
-                      <li><strong>Criado em:</strong> {new Date(pet.createdAt).toLocaleString('pt-BR')}</li>
-                    ) : (
-                      <li><strong>{pet.status === 'lost' ? 'Perdido em' : 'Encontrado em'}:</strong> {new Date(pet.lastSeenDate).toLocaleDateString('pt-BR')}</li>
-                    )}
-
-                    {pet.sightings && pet.sightings.length > 0 && (
-                      <li><strong>Última vista:</strong> {
-                        new Date(Math.max(...pet.sightings.map(s => new Date(s.date).getTime()))).toLocaleDateString('pt-BR')
-                      }</li>
-                    )}
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold">Contato</h4>
-                  <p className="text-sm text-muted-foreground mt-1">{pet.contactName} — {pet.contactPhone}</p>
-
-                  {pet.status === 'lost' && (
-                    <>
-                      <div className="flex items-center justify-between mt-3">
-                        <h4 className="font-semibold">Avistamentos</h4>
-                        {pet.sightings.length > 0 && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-6 text-xs px-2 text-muted-foreground hover:text-primary"
-                            onClick={() => {
-                              setDetailOpen(false)
-                              onViewSightings(pet)
-                            }}
-                          >
-                            Ver detalhes
-                          </Button>
-                        )}
-                      </div>
-                      <div className="text-sm text-muted-foreground mt-1 space-y-2 max-h-40 overflow-auto">
-                        {pet.sightings.length === 0 && <p>Nenhum avistamento registrado.</p>}
-                        {pet.sightings.map((s) => (
-                          <div 
-                            key={s.id} 
-                            className="border rounded px-2 py-1 cursor-pointer hover:bg-muted/50 transition-colors"
-                            onClick={() => {
-                              setDetailOpen(false)
-                              onViewSightings(pet)
-                            }}
-                          >
-                            <div className="text-xs text-muted-foreground"><strong>{new Date(s.date).toLocaleDateString('pt-BR')}</strong> {s.time}</div>
-                            <div className="text-xs text-muted-foreground">Reportado {formatDistanceToNow(new Date(s.createdAt), { addSuffix: true, locale: ptBR })}</div>
-                            <div className="text-sm">{s.description}</div>
-                            <div className="text-xs text-muted-foreground">{s.reporterName} — {s.reporterPhone}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-
-              <div className="pt-2 flex gap-2">
-                {pet.status === 'lost' && (
-                  <Button size="sm" className="bg-green-600 hover:bg-green-700" onClick={() => { onReportSighting(pet); setDetailOpen(false); }}>
-                    Avistar
-                  </Button>
-                )}
-                <Button size="sm" variant="outline" onClick={() => setContactDialogOpen(true)}>
-                  Contatar
-                </Button>
-                <Button size="sm" variant="outline" onClick={() => setDirectionsOpen(true)}>
-                  Como chegar
-                </Button>
-                <Button size="sm" variant="outline" onClick={() => { navigator.clipboard?.writeText(window.location.href); }}>
-                  Copiar link
-                </Button>
-              </div>
-            </div>
-
-            <div className="w-full h-60 sm:h-96">
-              <InteractiveMapClient pets={[pet]} selectedPetId={pet.id} onPetSelect={() => {}} />
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <PetDetailDialog
+        pet={pet}
+        open={detailOpen}
+        onClose={() => setDetailOpen(false)}
+        onViewSightings={onViewSightings}
+        onReportSighting={onReportSighting}
+      />
 
       <ContactDialog
         pet={pet}
@@ -360,12 +280,11 @@ export function PetCard({
         onClose={() => setContactDialogOpen(false)}
       />
 
-      <DirectionsDialog 
-        open={directionsOpen} 
-        onClose={() => setDirectionsOpen(false)} 
-        lat={pet.location.lat} 
-        lng={pet.location.lng} 
-        address={pet.location.address}
+      <ImageDialog
+        src={pet.photoUrl || '/placeholder.svg'}
+        alt={displayName || 'Pet'}
+        open={imageOpen}
+        onClose={() => setImageOpen(false)}
       />
     </>
   )

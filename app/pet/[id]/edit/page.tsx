@@ -19,6 +19,12 @@ import { Card, CardContent } from '@/components/ui/card'
 import { ArrowLeft, Upload, X, MapPin, AlertTriangle } from 'lucide-react'
 import { PetStatus, PetType, PetSize } from '@/lib/types'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
+
+const LocationPicker = dynamic(() => import('@/components/location-picker'), {
+  ssr: false,
+  loading: () => <div className="w-full h-[300px] bg-gray-100 animate-pulse rounded-lg" />
+})
 
 export default function EditPetPage() {
   const { user, isLoading: authLoading } = useAuth()
@@ -371,21 +377,16 @@ export default function EditPetPage() {
 
               <div className="space-y-1.5">
                 <Label className="text-xs sm:text-sm">Localização no mapa</Label>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleGetCurrentLocation}
-                  disabled={isGettingLocation}
-                  className="w-full h-9 text-sm"
-                >
-                  <MapPin className="w-4 h-4 mr-2" />
-                  {isGettingLocation ? 'Obtendo...' : 'Atualizar Localização'}
-                </Button>
-                {mapLocation && (
-                  <p className="text-xs text-green-600">
-                    ✓ {mapLocation.lat.toFixed(6)}, {mapLocation.lng.toFixed(6)}
-                  </p>
-                )}
+                <div className="rounded-lg overflow-hidden border border-gray-200">
+                  <LocationPicker 
+                    initialLat={mapLocation?.lat} 
+                    initialLng={mapLocation?.lng} 
+                    onLocationSelect={(lat, lng) => setMapLocation({ lat, lng })} 
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Toque no mapa para ajustar a localização exata.
+                </p>
               </div>
             </CardContent>
           </Card>

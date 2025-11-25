@@ -5,6 +5,8 @@ import { AuthProvider } from '@/lib/auth-context'
 import { Header } from '@/components/header'
 import { Toaster } from '@/components/ui/toaster'
 import { ThemeProvider } from '@/components/theme-provider'
+import { HighContrastManager } from '@/components/high-contrast-manager'
+import { LocationUpdater } from '@/components/location-updater'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -33,7 +35,9 @@ export default function RootLayout({
           disableTransitionOnChange
           forcedTheme="light"
         >
+          <HighContrastManager />
           <AuthProvider>
+            <LocationUpdater />
             <Header />
             {children}
             <Toaster />

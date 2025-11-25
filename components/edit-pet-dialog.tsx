@@ -46,6 +46,7 @@ export function EditPetDialog({ pet, open, onOpenChange, onSuccess }: EditPetDia
   const [breed, setBreed] = useState('')
   const [size, setSize] = useState<PetSize>('medium')
   const [age, setAge] = useState('')
+  const [ageUnit, setAgeUnit] = useState<'ANOS' | 'MESES'>('ANOS')
   const [location, setLocation] = useState('')
   const [city, setCity] = useState('')
   const [neighborhood, setNeighborhood] = useState('')
@@ -69,7 +70,8 @@ export function EditPetDialog({ pet, open, onOpenChange, onSuccess }: EditPetDia
       setType(pet.type)
       setBreed(pet.breed || '')
       setSize(pet.size || 'medium')
-      setAge(pet.age || '')
+      setAge(pet.age ? String(pet.age) : '')
+      setAgeUnit(pet.ageUnit || 'ANOS')
       setLocation(pet.location.address || '')
       setCity(pet.location.city || '')
       setNeighborhood(pet.location.neighborhood || '')
@@ -202,7 +204,10 @@ export function EditPetDialog({ pet, open, onOpenChange, onSuccess }: EditPetDia
       if (name) formData.append('nome_pet', name)
       if (breed) formData.append('raca', breed)
       if (size) formData.append('porte', porteMap[size] || '')
-      if (age) formData.append('idade', age)
+      if (age) {
+        formData.append('idade', age)
+        formData.append('unidadeIdade', ageUnit)
+      }
       if (contactPhone) formData.append('telefone_contato', contactPhone)
       formData.append('data_evento', eventDate || new Date().toISOString())
 
@@ -359,12 +364,24 @@ export function EditPetDialog({ pet, open, onOpenChange, onSuccess }: EditPetDia
 
               <div className="space-y-1.5">
                 <Label htmlFor="age" className="text-xs sm:text-sm">Idade</Label>
-                <Input
-                  id="age"
-                  value={age}
-                  onChange={(e) => setAge(e.target.value)}
-                  className="h-9 text-sm"
-                />
+                <div className="flex gap-2">
+                  <Input
+                    id="age"
+                    type="number"
+                    value={age}
+                    onChange={(e) => setAge(e.target.value)}
+                    className="h-9 text-sm flex-1"
+                  />
+                  <Select value={ageUnit} onValueChange={(val) => setAgeUnit(val as 'ANOS' | 'MESES')}>
+                    <SelectTrigger className="w-[100px] h-9 text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ANOS">Anos</SelectItem>
+                      <SelectItem value="MESES">Meses</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
 

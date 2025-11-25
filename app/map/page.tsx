@@ -13,6 +13,8 @@ const InteractiveMapClient = dynamic(() => import('@/components/leaflet-map.clie
   ssr: false,
 })
 import { SightingDialog } from '@/components/sighting-dialog'
+import { PetDetailDialog } from '@/components/pet-detail-dialog'
+import { ViewSightingsDialog } from '@/components/view-sightings-dialog'
 import { MobileNav } from '@/components/mobile-nav'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
@@ -25,12 +27,12 @@ function MapContent() {
 
   const [pets, setPets] = useState<Pet[]>([])
   const [selectedPetForSighting, setSelectedPetForSighting] = useState<Pet | null>(null)
+  const [selectedPetForDetails, setSelectedPetForDetails] = useState<Pet | null>(null)
+  const [selectedPetForViewing, setSelectedPetForViewing] = useState<Pet | null>(null)
   const [statusFilter, setStatusFilter] = useState<'all' | 'lost' | 'found' | 'adoption'>('all')
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/login')
-    }
+    // Removed redirect to login
   }, [user, isLoading, router])
 
   useEffect(() => {
@@ -123,12 +125,15 @@ function MapContent() {
       </div>
 
       <div className="flex-1 flex flex-col overflow-hidden pb-20 sm:pb-16">
-        <div className="flex-1 transition-all">
-          <div className="mx-4 sm:mx-0 border border-gray-200 rounded-lg shadow overflow-hidden max-h-[72vh] sm:max-h-[60vh] bg-white z-0">
+        <div className="flex-1 transition-all h-full">
+          <div className="h-full w-full bg-white z-0">
             <InteractiveMapClient
               pets={pets}
               selectedPetId={petId}
-              onPetSelect={setSelectedPetForSighting}
+              onPetSelect={(pet) => router.push(`/map?petId=${pet.id}`)}
+              onReportSighting={setSelectedPetForSighting}
+              onViewDetails={setSelectedPetForDetails}
+              onDeselect={() => router.push('/map')}
               statusFilter={statusFilter}
               userLocation={user?.location ? { lat: user.location.lat, lng: user.location.lng } : undefined}
             />
@@ -141,6 +146,20 @@ function MapContent() {
         open={!!selectedPetForSighting}
         onClose={() => setSelectedPetForSighting(null)}
         onSubmit={handleSubmitSighting}
+      />
+
+      <PetDetailDialog
+        pet={selectedPetForDetails}
+        open={!!selectedPetForDetails}
+        onClose={() => setSelectedPetForDetails(null)}
+        onReportSighting={setSelectedPetForSighting}
+        onViewSightings={setSelectedPetForViewing}
+      />
+
+      <ViewSightingsDialog
+        pet={selectedPetForViewing}
+        open={!!selectedPetForViewing}
+        onClose={() => setSelectedPetForViewing(null)}
       />
 
       <MobileNav />

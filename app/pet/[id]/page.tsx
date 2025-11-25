@@ -5,10 +5,11 @@ import { useRouter, useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import Image from 'next/image'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Maximize2 } from 'lucide-react'
 import { InteractiveMap as InteractiveMapClient } from '@/components/interactive-map.client'
 import { ContactDialog } from '@/components/contact-dialog'
 import { SightingDialog } from '@/components/sighting-dialog'
+import { ImageDialog } from '@/components/image-dialog'
 import { Pet, Sighting } from '@/lib/types'
 import { apiFetch } from '@/lib/api'
 import { mapPublicacaoToPet } from '@/lib/api-mappers'
@@ -28,6 +29,7 @@ export default function PetShowPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [contactOpen, setContactOpen] = useState(false)
   const [sightingOpen, setSightingOpen] = useState(false)
+  const [imageOpen, setImageOpen] = useState(false)
 
   useEffect(() => {
     async function loadPet() {
@@ -140,8 +142,19 @@ export default function PetShowPage() {
           </div>
         </div>
         <div className="space-y-4">
-          <div className="w-full h-48 sm:h-64 relative rounded-lg overflow-hidden bg-gray-100">
-            <Image src={pet.photoUrl || '/placeholder.svg'} alt={pet.name || 'Pet'} fill className="object-cover" />
+          <div 
+            className="w-full h-48 sm:h-64 relative rounded-lg overflow-hidden bg-gray-100 cursor-zoom-in group"
+            onClick={() => setImageOpen(true)}
+          >
+            <Image 
+              src={pet.photoUrl || '/placeholder.svg'} 
+              alt={pet.name || 'Pet'} 
+              fill 
+              className="object-contain transition-transform group-hover:scale-105" 
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+              <Maximize2 className="w-8 h-8 text-white drop-shadow-lg" />
+            </div>
           </div>
 
           <Card>
@@ -223,6 +236,13 @@ export default function PetShowPage() {
 
       <ContactDialog pet={pet} open={contactOpen} onClose={() => setContactOpen(false)} />
       <SightingDialog pet={pet} open={sightingOpen} onClose={() => setSightingOpen(false)} onSubmit={handleSightingSubmit} />
+      
+      <ImageDialog
+        src={pet.photoUrl || '/placeholder.svg'}
+        alt={pet.name || 'Pet'}
+        open={imageOpen}
+        onClose={() => setImageOpen(false)}
+      />
     </div>
   )
 }

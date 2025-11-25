@@ -123,18 +123,31 @@ function AuthProvider({ children }) {
             setIsLoading(false);
         }
     };
-    const loginWithGoogle = async ()=>{
-        // Placeholder: implement OAuth flow when backend supports it.
-        const mockUser = {
-            id: 'google-1',
-            name: 'Usuario Google',
-            email: 'usuario@gmail.com',
-            phone: '+55 11 98765-4321',
-            photoUrl: '/user-profile-illustration.png',
-            createdAt: new Date()
-        };
-        setUser(mockUser);
-        localStorage.setItem('user', JSON.stringify(mockUser));
+    const loginWithGoogle = async (idToken)=>{
+        setIsLoading(true);
+        try {
+            const res = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$api$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["apiFetch"])('/api/auth/google', {
+                method: 'POST',
+                body: JSON.stringify({
+                    idToken
+                })
+            });
+            const userData = {
+                id: res.user.id,
+                name: res.user.name,
+                email: res.user.email,
+                phone: res.user.phone || '',
+                photoUrl: res.user.photoUrl || '/user-profile-illustration.png',
+                createdAt: new Date()
+            };
+            setUser(userData);
+            localStorage.setItem('user', JSON.stringify(userData));
+            if (res.token) localStorage.setItem('token', res.token);
+        } catch (error) {
+            throw error;
+        } finally{
+            setIsLoading(false);
+        }
     };
     const signup = async (name, email, password, phone, lat, lng, address, city)=>{
         setIsLoading(true);
@@ -193,7 +206,7 @@ function AuthProvider({ children }) {
         children: children
     }, void 0, false, {
         fileName: "[project]/lib/auth-context.tsx",
-        lineNumber: 140,
+        lineNumber: 153,
         columnNumber: 5
     }, this);
 }
@@ -393,8 +406,8 @@ function NotificationCenter() {
             ]);
         }
         // Navegar para o recurso relacionado
-        if (n.dados?.publicacaoId) {
-            router.push(`/pet/${n.dados.publicacaoId}`);
+        if (n.dados?.publicacaoId || n.dados?.petId) {
+            router.push(`/pet/${n.dados.publicacaoId || n.dados.petId}`);
             setOpen(false);
         } else {
             // Fallback
@@ -433,7 +446,7 @@ function NotificationCenter() {
                 columnNumber: 7
             }, this),
             open && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "absolute right-0 mt-2 w-96 bg-white border rounded-md shadow-lg z-50 flex flex-col",
+                className: "fixed left-2 right-2 top-16 sm:absolute sm:left-auto sm:right-0 sm:top-auto sm:mt-2 sm:w-96 bg-white border rounded-md shadow-lg z-50 flex flex-col",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "px-3 py-2 border-b flex items-center justify-between bg-slate-50 rounded-t-md",

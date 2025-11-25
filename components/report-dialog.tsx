@@ -2,6 +2,9 @@
 
 import { useState } from 'react'
 import { Pet } from '@/lib/types'
+import { useAuth } from '@/lib/auth-context'
+import { apiFetch } from '@/lib/api'
+import { useToast } from '@/hooks/use-toast'
 import {
   Dialog,
   DialogContent,
@@ -29,21 +32,47 @@ interface ReportDialogProps {
 }
 
 export function ReportDialog({ pet, open, onClose }: ReportDialogProps) {
+  const { user } = useAuth()
+  const { toast } = useToast()
   const [reason, setReason] = useState('')
   const [details, setDetails] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!pet) return
+
     setIsSubmitting(true)
 
-    await new Promise((resolve) => setTimeout(resolve, 1500))
+    try {
+      await apiFetch('/api/denuncias', {
+        method: 'POST',
+        body: JSON.stringify({
+          publicacaoId: Number(pet.id),
+          usuarioId: user?.id, // Envia ID se logado, senão undefined (anônimo)
+          motivo: reason,
+          descricao: details
+        })
+      })
 
-    alert('Denúncia enviada com sucesso. Nossa equipe irá analisar.')
-    setReason('')
-    setDetails('')
-    setIsSubmitting(false)
-    onClose()
+      toast({
+        title: 'Denúncia enviada',
+        description: 'Nossa equipe analisará o caso. Obrigado por ajudar a manter a comunidade segura.',
+      })
+      
+      setReason('')
+      setDetails('')
+      onClose()
+    } catch (error) {
+      console.error('Erro ao enviar denúncia:', error)
+      toast({
+        title: 'Erro',
+        description: 'Não foi possível enviar a denúncia. Tente novamente.',
+        variant: 'destructive'
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   if (!pet) return null
@@ -65,10 +94,10 @@ export function ReportDialog({ pet, open, onClose }: ReportDialogProps) {
           <div className="space-y-2">
             <Label htmlFor="reason" className="text-sm">Motivo da denúncia *</Label>
             <Select value={reason} onValueChange={setReason} required>
-              <SelectTrigger id="reason" className="text-sm">
+              <SelectTrigger id="reason" className="text-sm z-2060">
                 <SelectValue placeholder="Selecione o motivo" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="z-2060">
                 <SelectItem value="fake">Anúncio falso ou enganoso</SelectItem>
                 <SelectItem value="inappropriate">Conteúdo inapropriado</SelectItem>
                 <SelectItem value="spam">Spam ou propaganda</SelectItem>

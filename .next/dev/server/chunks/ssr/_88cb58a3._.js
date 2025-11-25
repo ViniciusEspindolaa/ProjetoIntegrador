@@ -862,7 +862,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$interactive$2d
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$directions$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/directions-dialog.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$formatDistanceToNow$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/date-fns/formatDistanceToNow.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$date$2d$fns$2f$locale$2f$pt$2d$BR$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/date-fns/locale/pt-BR.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$maximize$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Maximize2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/maximize-2.js [app-ssr] (ecmascript) <export default as Maximize2>");
 'use client';
+;
 ;
 ;
 ;
@@ -880,6 +882,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
     const [contactDialogOpen, setContactDialogOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [detailOpen, setDetailOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [directionsOpen, setDirectionsOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [imageOpen, setImageOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const statusConfig = {
         lost: {
             label: 'Perdido',
@@ -920,7 +923,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                 loading: "lazy"
                             }, void 0, false, {
                                 fileName: "[project]/components/pet-card.tsx",
-                                lineNumber: 72,
+                                lineNumber: 75,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -931,7 +934,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                         children: statusConfig[pet.status].label
                                     }, void 0, false, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 81,
+                                        lineNumber: 84,
                                         columnNumber: 13
                                     }, this),
                                     pet.completed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
@@ -940,13 +943,32 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                         children: "Finalizado"
                                     }, void 0, false, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 85,
+                                        lineNumber: 88,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/pet-card.tsx",
-                                lineNumber: 80,
+                                lineNumber: 83,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: (e)=>{
+                                    e.stopPropagation();
+                                    setImageOpen(true);
+                                },
+                                className: "absolute bottom-2 left-2 p-1.5 rounded-full bg-black/30 hover:bg-black/50 text-white transition-colors z-10",
+                                title: "Ampliar foto",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$maximize$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Maximize2$3e$__["Maximize2"], {
+                                    className: "w-3.5 h-3.5"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/pet-card.tsx",
+                                    lineNumber: 99,
+                                    columnNumber: 13
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/components/pet-card.tsx",
+                                lineNumber: 94,
                                 columnNumber: 11
                             }, this),
                             pet.reward && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -957,7 +979,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/pet-card.tsx",
-                                lineNumber: 91,
+                                lineNumber: 103,
                                 columnNumber: 13
                             }, this),
                             pet.sightings.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -974,7 +996,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                         className: compactMode ? "w-3 h-3 text-gray-700" : "w-3 h-3 text-gray-700"
                                     }, void 0, false, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 101,
+                                        lineNumber: 113,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -982,19 +1004,19 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                         children: pet.sightings.length
                                     }, void 0, false, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 102,
+                                        lineNumber: 114,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/pet-card.tsx",
-                                lineNumber: 96,
+                                lineNumber: 108,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/pet-card.tsx",
-                        lineNumber: 71,
+                        lineNumber: 74,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
@@ -1009,12 +1031,12 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                             children: displayName
                                         }, void 0, false, {
                                             fileName: "[project]/components/pet-card.tsx",
-                                            lineNumber: 111,
+                                            lineNumber: 123,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 109,
+                                        lineNumber: 121,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1026,7 +1048,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                 children: pet.breed
                                             }, void 0, false, {
                                                 fileName: "[project]/components/pet-card.tsx",
-                                                lineNumber: 118,
+                                                lineNumber: 130,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
@@ -1035,19 +1057,19 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                 children: pet.size === 'small' ? 'Pequeno' : pet.size === 'medium' ? 'Médio' : 'Grande'
                                             }, void 0, false, {
                                                 fileName: "[project]/components/pet-card.tsx",
-                                                lineNumber: 121,
+                                                lineNumber: 133,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 117,
+                                        lineNumber: 129,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/pet-card.tsx",
-                                lineNumber: 108,
+                                lineNumber: 120,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1057,7 +1079,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                         className: compactMode ? "w-3 h-3 mt-0.5 text-muted-foreground shrink-0" : "w-3.5 h-3.5 mt-0.5 text-muted-foreground shrink-0"
                                     }, void 0, false, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 128,
+                                        lineNumber: 140,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1068,7 +1090,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                 children: pet.location.address
                                             }, void 0, false, {
                                                 fileName: "[project]/components/pet-card.tsx",
-                                                lineNumber: 130,
+                                                lineNumber: 142,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1079,7 +1101,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/pet-card.tsx",
-                                                lineNumber: 133,
+                                                lineNumber: 145,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1094,19 +1116,19 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/pet-card.tsx",
-                                                lineNumber: 137,
+                                                lineNumber: 149,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 129,
+                                        lineNumber: 141,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/pet-card.tsx",
-                                lineNumber: 127,
+                                lineNumber: 139,
                                 columnNumber: 11
                             }, this),
                             !compactMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -1116,7 +1138,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                         children: pet.description
                                     }, void 0, false, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 145,
+                                        lineNumber: 157,
                                         columnNumber: 15
                                     }, this),
                                     pet.completed && pet.completionReason && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1129,7 +1151,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                     children: "Finalizado:"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/pet-card.tsx",
-                                                    lineNumber: 150,
+                                                    lineNumber: 162,
                                                     columnNumber: 21
                                                 }, this),
                                                 " ",
@@ -1137,12 +1159,12 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/pet-card.tsx",
-                                            lineNumber: 149,
+                                            lineNumber: 161,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 148,
+                                        lineNumber: 160,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1152,7 +1174,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                 className: "w-3.5 h-3.5 shrink-0"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/pet-card.tsx",
-                                                lineNumber: 156,
+                                                lineNumber: 168,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1160,13 +1182,13 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                 children: pet.contactName
                                             }, void 0, false, {
                                                 fileName: "[project]/components/pet-card.tsx",
-                                                lineNumber: 157,
+                                                lineNumber: 169,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 155,
+                                        lineNumber: 167,
                                         columnNumber: 15
                                     }, this)
                                 ]
@@ -1188,12 +1210,12 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                             children: "Editar"
                                         }, void 0, false, {
                                             fileName: "[project]/components/pet-card.tsx",
-                                            lineNumber: 171,
+                                            lineNumber: 183,
                                             columnNumber: 32
                                         }, this) : 'Editar'
                                     }, void 0, false, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 164,
+                                        lineNumber: 176,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1208,13 +1230,13 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                         children: !compactMode && 'Finalizar'
                                     }, void 0, false, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 173,
+                                        lineNumber: 185,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/pet-card.tsx",
-                                lineNumber: 163,
+                                lineNumber: 175,
                                 columnNumber: 13
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                                 children: [
@@ -1234,7 +1256,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                         className: "w-3 h-3"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/pet-card.tsx",
-                                                        lineNumber: 192,
+                                                        lineNumber: 204,
                                                         columnNumber: 19
                                                     }, this),
                                                     !compactMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1242,13 +1264,13 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                         children: "Mapa"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/pet-card.tsx",
-                                                        lineNumber: 193,
+                                                        lineNumber: 205,
                                                         columnNumber: 36
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/pet-card.tsx",
-                                                lineNumber: 186,
+                                                lineNumber: 198,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1263,7 +1285,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                         className: "w-3 h-3"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/pet-card.tsx",
-                                                        lineNumber: 200,
+                                                        lineNumber: 212,
                                                         columnNumber: 19
                                                     }, this),
                                                     !compactMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1271,13 +1293,13 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                         children: "Contato"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/pet-card.tsx",
-                                                        lineNumber: 201,
+                                                        lineNumber: 213,
                                                         columnNumber: 36
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/pet-card.tsx",
-                                                lineNumber: 195,
+                                                lineNumber: 207,
                                                 columnNumber: 17
                                             }, this),
                                             pet.status === 'lost' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1293,7 +1315,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                         className: "w-3 h-3"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/pet-card.tsx",
-                                                        lineNumber: 210,
+                                                        lineNumber: 222,
                                                         columnNumber: 19
                                                     }, this),
                                                     !compactMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1301,19 +1323,19 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                         children: "Avistar"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/pet-card.tsx",
-                                                        lineNumber: 211,
+                                                        lineNumber: 223,
                                                         columnNumber: 36
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/pet-card.tsx",
-                                                lineNumber: 204,
+                                                lineNumber: 216,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 185,
+                                        lineNumber: 197,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1332,7 +1354,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                         className: "w-3 h-3"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/pet-card.tsx",
-                                                        lineNumber: 222,
+                                                        lineNumber: 234,
                                                         columnNumber: 19
                                                     }, this),
                                                     !compactMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1340,13 +1362,13 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                         children: "Compartilhar"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/pet-card.tsx",
-                                                        lineNumber: 223,
+                                                        lineNumber: 235,
                                                         columnNumber: 36
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/pet-card.tsx",
-                                                lineNumber: 216,
+                                                lineNumber: 228,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1362,7 +1384,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                         className: "w-3 h-3"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/pet-card.tsx",
-                                                        lineNumber: 231,
+                                                        lineNumber: 243,
                                                         columnNumber: 19
                                                     }, this),
                                                     !compactMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1370,19 +1392,19 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                         children: "Denunciar"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/pet-card.tsx",
-                                                        lineNumber: 232,
+                                                        lineNumber: 244,
                                                         columnNumber: 36
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/components/pet-card.tsx",
-                                                lineNumber: 225,
+                                                lineNumber: 237,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 215,
+                                        lineNumber: 227,
                                         columnNumber: 15
                                     }, this)
                                 ]
@@ -1390,13 +1412,13 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/pet-card.tsx",
-                        lineNumber: 107,
+                        lineNumber: 119,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/pet-card.tsx",
-                lineNumber: 70,
+                lineNumber: 73,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Dialog"], {
@@ -1411,7 +1433,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                     children: displayName || `${pet.type}`
                                 }, void 0, false, {
                                     fileName: "[project]/components/pet-card.tsx",
-                                    lineNumber: 243,
+                                    lineNumber: 255,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DialogDescription"], {
@@ -1422,33 +1444,50 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/pet-card.tsx",
-                                    lineNumber: 244,
+                                    lineNumber: 256,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/pet-card.tsx",
-                            lineNumber: 242,
+                            lineNumber: 254,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "space-y-4 pt-2",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "w-full h-48 sm:h-64 relative rounded-lg overflow-hidden bg-gray-100",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
-                                        src: pet.photoUrl || '/placeholder.svg',
-                                        alt: displayName || 'Pet',
-                                        fill: true,
-                                        className: "object-cover"
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 251,
-                                        columnNumber: 15
-                                    }, this)
-                                }, void 0, false, {
+                                    className: "w-full h-48 sm:h-64 relative rounded-lg overflow-hidden bg-gray-100 cursor-zoom-in group",
+                                    onClick: ()=>setImageOpen(true),
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                                            src: pet.photoUrl || '/placeholder.svg',
+                                            alt: displayName || 'Pet',
+                                            fill: true,
+                                            className: "object-cover transition-transform group-hover:scale-105"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/pet-card.tsx",
+                                            lineNumber: 266,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100",
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$maximize$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Maximize2$3e$__["Maximize2"], {
+                                                className: "w-8 h-8 text-white drop-shadow-lg"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/pet-card.tsx",
+                                                lineNumber: 273,
+                                                columnNumber: 17
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/pet-card.tsx",
+                                            lineNumber: 272,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
                                     fileName: "[project]/components/pet-card.tsx",
-                                    lineNumber: 250,
+                                    lineNumber: 262,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1462,7 +1501,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                     children: statusConfig[pet.status].label
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/pet-card.tsx",
-                                                    lineNumber: 256,
+                                                    lineNumber: 279,
                                                     columnNumber: 17
                                                 }, this),
                                                 pet.reward && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1473,7 +1512,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/pet-card.tsx",
-                                                    lineNumber: 259,
+                                                    lineNumber: 282,
                                                     columnNumber: 32
                                                 }, this),
                                                 pet.completed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1481,13 +1520,13 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                     children: "Finalizado"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/pet-card.tsx",
-                                                    lineNumber: 260,
+                                                    lineNumber: 283,
                                                     columnNumber: 35
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/pet-card.tsx",
-                                            lineNumber: 255,
+                                            lineNumber: 278,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1500,7 +1539,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                             children: "Informações"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/pet-card.tsx",
-                                                            lineNumber: 265,
+                                                            lineNumber: 288,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -1512,7 +1551,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                             children: "Tipo:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/pet-card.tsx",
-                                                                            lineNumber: 267,
+                                                                            lineNumber: 290,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         " ",
@@ -1520,7 +1559,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/pet-card.tsx",
-                                                                    lineNumber: 267,
+                                                                    lineNumber: 290,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 pet.age && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1529,7 +1568,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                             children: "Idade:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/pet-card.tsx",
-                                                                            lineNumber: 268,
+                                                                            lineNumber: 291,
                                                                             columnNumber: 37
                                                                         }, this),
                                                                         " ",
@@ -1537,7 +1576,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/pet-card.tsx",
-                                                                    lineNumber: 268,
+                                                                    lineNumber: 291,
                                                                     columnNumber: 33
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1546,7 +1585,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                             children: "Cidade:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/pet-card.tsx",
-                                                                            lineNumber: 269,
+                                                                            lineNumber: 292,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         " ",
@@ -1554,7 +1593,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/pet-card.tsx",
-                                                                    lineNumber: 269,
+                                                                    lineNumber: 292,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 pet.location.neighborhood && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1563,7 +1602,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                             children: "Bairro:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/pet-card.tsx",
-                                                                            lineNumber: 270,
+                                                                            lineNumber: 293,
                                                                             columnNumber: 55
                                                                         }, this),
                                                                         " ",
@@ -1571,7 +1610,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/pet-card.tsx",
-                                                                    lineNumber: 270,
+                                                                    lineNumber: 293,
                                                                     columnNumber: 51
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1580,7 +1619,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                             children: "Endereço:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/pet-card.tsx",
-                                                                            lineNumber: 271,
+                                                                            lineNumber: 294,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         " ",
@@ -1588,7 +1627,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/pet-card.tsx",
-                                                                    lineNumber: 271,
+                                                                    lineNumber: 294,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 pet.status === 'adoption' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1597,7 +1636,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                             children: "Criado em:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/pet-card.tsx",
-                                                                            lineNumber: 274,
+                                                                            lineNumber: 297,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         " ",
@@ -1605,7 +1644,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/pet-card.tsx",
-                                                                    lineNumber: 274,
+                                                                    lineNumber: 297,
                                                                     columnNumber: 23
                                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
                                                                     children: [
@@ -1616,7 +1655,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/components/pet-card.tsx",
-                                                                            lineNumber: 276,
+                                                                            lineNumber: 299,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         " ",
@@ -1624,7 +1663,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/pet-card.tsx",
-                                                                    lineNumber: 276,
+                                                                    lineNumber: 299,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 pet.sightings && pet.sightings.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1633,7 +1672,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                             children: "Última vista:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/pet-card.tsx",
-                                                                            lineNumber: 280,
+                                                                            lineNumber: 303,
                                                                             columnNumber: 27
                                                                         }, this),
                                                                         " ",
@@ -1641,19 +1680,19 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/pet-card.tsx",
-                                                                    lineNumber: 280,
+                                                                    lineNumber: 303,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/pet-card.tsx",
-                                                            lineNumber: 266,
+                                                            lineNumber: 289,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/pet-card.tsx",
-                                                    lineNumber: 264,
+                                                    lineNumber: 287,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1663,7 +1702,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                             children: "Contato"
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/pet-card.tsx",
-                                                            lineNumber: 288,
+                                                            lineNumber: 311,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1675,7 +1714,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/components/pet-card.tsx",
-                                                            lineNumber: 289,
+                                                            lineNumber: 312,
                                                             columnNumber: 19
                                                         }, this),
                                                         pet.status === 'lost' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -1688,7 +1727,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                             children: "Avistamentos"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/pet-card.tsx",
-                                                                            lineNumber: 294,
+                                                                            lineNumber: 317,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         pet.sightings.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1702,13 +1741,13 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                             children: "Ver detalhes"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/pet-card.tsx",
-                                                                            lineNumber: 296,
+                                                                            lineNumber: 319,
                                                                             columnNumber: 27
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/pet-card.tsx",
-                                                                    lineNumber: 293,
+                                                                    lineNumber: 316,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1718,7 +1757,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                             children: "Nenhum avistamento registrado."
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/components/pet-card.tsx",
-                                                                            lineNumber: 310,
+                                                                            lineNumber: 333,
                                                                             columnNumber: 56
                                                                         }, this),
                                                                         pet.sightings.map((s)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1735,7 +1774,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                                                 children: new Date(s.date).toLocaleDateString('pt-BR')
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/components/pet-card.tsx",
-                                                                                                lineNumber: 320,
+                                                                                                lineNumber: 343,
                                                                                                 columnNumber: 76
                                                                                             }, this),
                                                                                             " ",
@@ -1743,7 +1782,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/components/pet-card.tsx",
-                                                                                        lineNumber: 320,
+                                                                                        lineNumber: 343,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1757,7 +1796,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/components/pet-card.tsx",
-                                                                                        lineNumber: 321,
+                                                                                        lineNumber: 344,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1765,7 +1804,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                                         children: s.description
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/components/pet-card.tsx",
-                                                                                        lineNumber: 322,
+                                                                                        lineNumber: 345,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1777,19 +1816,19 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/components/pet-card.tsx",
-                                                                                        lineNumber: 323,
+                                                                                        lineNumber: 346,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, s.id, true, {
                                                                                 fileName: "[project]/components/pet-card.tsx",
-                                                                                lineNumber: 312,
+                                                                                lineNumber: 335,
                                                                                 columnNumber: 27
                                                                             }, this))
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/components/pet-card.tsx",
-                                                                    lineNumber: 309,
+                                                                    lineNumber: 332,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
@@ -1797,13 +1836,13 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/pet-card.tsx",
-                                                    lineNumber: 287,
+                                                    lineNumber: 310,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/pet-card.tsx",
-                                            lineNumber: 263,
+                                            lineNumber: 286,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1819,7 +1858,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                     children: "Avistar"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/pet-card.tsx",
-                                                    lineNumber: 334,
+                                                    lineNumber: 357,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1829,7 +1868,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                     children: "Contatar"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/pet-card.tsx",
-                                                    lineNumber: 338,
+                                                    lineNumber: 361,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1839,7 +1878,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                     children: "Como chegar"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/pet-card.tsx",
-                                                    lineNumber: 341,
+                                                    lineNumber: 364,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1851,19 +1890,19 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                                     children: "Copiar link"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/pet-card.tsx",
-                                                    lineNumber: 344,
+                                                    lineNumber: 367,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/pet-card.tsx",
-                                            lineNumber: 332,
+                                            lineNumber: 355,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/pet-card.tsx",
-                                    lineNumber: 254,
+                                    lineNumber: 277,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1876,29 +1915,29 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                                         onPetSelect: ()=>{}
                                     }, void 0, false, {
                                         fileName: "[project]/components/pet-card.tsx",
-                                        lineNumber: 351,
+                                        lineNumber: 374,
                                         columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/pet-card.tsx",
-                                    lineNumber: 350,
+                                    lineNumber: 373,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/pet-card.tsx",
-                            lineNumber: 249,
+                            lineNumber: 261,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/pet-card.tsx",
-                    lineNumber: 241,
+                    lineNumber: 253,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/components/pet-card.tsx",
-                lineNumber: 240,
+                lineNumber: 252,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$contact$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ContactDialog"], {
@@ -1907,7 +1946,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                 onClose: ()=>setContactDialogOpen(false)
             }, void 0, false, {
                 fileName: "[project]/components/pet-card.tsx",
-                lineNumber: 357,
+                lineNumber: 380,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$directions$2d$dialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DirectionsDialog"], {
@@ -1918,7 +1957,7 @@ function PetCard({ pet, onViewSightings, onReportSighting, onViewMap, isOwner = 
                 address: pet.location.address
             }, void 0, false, {
                 fileName: "[project]/components/pet-card.tsx",
-                lineNumber: 363,
+                lineNumber: 386,
                 columnNumber: 7
             }, this)
         ]

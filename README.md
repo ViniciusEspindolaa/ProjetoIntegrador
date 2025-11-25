@@ -1,107 +1,112 @@
-# PetFinder
+# 🐾 PetFinder Frontend
 
-Aplicação para publicar e encontrar pets perdidos/encontrados/para adoção.
+Interface moderna e responsiva para a plataforma PetFinder, desenvolvida com **Next.js 14** e **Tailwind CSS**.
 
-Este repositório contém uma app Next.js (App Router) em TypeScript com componentes React e Tailwind.
+## ✨ **STATUS: MVP COMPLETO (TCC)** ✨
 
-Principais localizações no projeto:
-- `app/` — páginas (routes) do Next.js
-- `components/` — componentes reutilizáveis (map, cards, dialogs)
-- `lib/` — helpers e mock-data
-- `public/` — assets estáticos (ex.: `logo.png`)
+## 🚀 Funcionalidades
 
-## Tecnologias
-- Next.js (App Router)
-- TypeScript
-- Tailwind CSS
-- lucide-react (ícones)
+- **🔐 Autenticação Completa**:
+  - Login e Cadastro
+  - **Login Social com Google**
+  - **Recuperação de Senha** (Fluxo completo)
+- **🗺️ Mapa Interativo**:
+  - Visualização de pets perdidos/encontrados no mapa (Leaflet/OpenStreetMap)
+  - Filtragem por raio de distância
+- **📱 Responsividade**: Design mobile-first adaptado para qualquer dispositivo
+- **👤 Perfil de Usuário**:
+  - Edição de dados pessoais
+  - **Configuração de Raio de Alerta** (Slider interativo)
+  - Histórico de pets reportados
+- **📢 Reportar Pet**:
+  - Fluxo guiado para cadastro de pets
+  - Upload de fotos (integrado ao Cloudinary via Backend)
+  - **Seletor de Localização Precisa**: Mapa interativo para marcar o local exato do avistamento ou perda
+- **🔔 Notificações**: Interface para visualizar alertas de pets próximos
+- **♿ Acessibilidade**:
+  - **Modo Alto Contraste**: Opção para melhorar a legibilidade para usuários com baixa visão
+- **📍 Geolocalização Avançada**:
+  - **Rastreamento em Segundo Plano**: Atualização automática da localização do usuário para alertas de proximidade (Geofencing)
+  - **Geocodificação Reversa**: Preenchimento automático de endereço ao clicar no mapa
+- **🔍 Busca e Filtros**:
+  - Ordenação por data, proximidade e recompensa
+  - Filtros por espécie, status e localização
 
-## Rodando localmente
+## 🛠️ Tecnologias
 
-1. Instale dependências:
+- **Next.js 14** (App Router)
+- **TypeScript**
+- **Tailwind CSS** - Estilização
+- **Shadcn/UI** - Componentes de interface acessíveis
+- **Radix UI** - Primitivos de UI
+- **Lucide React** - Ícones
+- **Leaflet & React-Leaflet** - Mapas Interativos (OpenStreetMap)
+- **Nominatim API** - Geocodificação Reversa (OpenStreetMap)
+- **Google Identity Services** - Login Google
+- **Zod** - Validação de formulários
+- **React Hook Form** - Gerenciamento de formulários
 
-```powershell
+## 📦 Instalação
+
+### Pré-requisitos
+- Node.js >= 18
+- Backend do PetFinder rodando (porta 3001)
+
+### 1. Clone o repositório
+```bash
+git clone https://github.com/seu-usuario/petfinder-frontend.git
+cd Frontend
+```
+
+### 2. Instale as dependências
+```bash
 npm install
 ```
 
-2. Crie um arquivo `.env.local` com variáveis necessárias (exemplos abaixo) e reinicie o servidor quando editar variáveis de ambiente.
+### 3. Configure as variáveis de ambiente
+Crie um arquivo `.env.local` na raiz do projeto:
 
-3. Rode em modo de desenvolvimento:
+```env
+# URL da API Backend
+NEXT_PUBLIC_API_URL=http://localhost:3001
 
-```powershell
+# Google OAuth (Necessário para login com Google)
+NEXT_PUBLIC_GOOGLE_CLIENT_ID="sua_client_id_google"
+```
+
+### 4. Inicie o servidor de desenvolvimento
+```bash
 npm run dev
 ```
 
-Abra `http://localhost:3000` no navegador.
+Abra [http://localhost:3000](http://localhost:3000) no seu navegador.
 
-## Variáveis de ambiente úteis
-- `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` — chave pública para Google Maps (usada no cliente). Restrinja por HTTP referrers.
-- `GOOGLE_MAPS_SERVER_KEY` — chave privada para chamadas server-side (opcional; restrinja por IP).
-- `DATABASE_URL` — URL do banco de dados (se for usar Postgres/Prisma).
-- `SENDGRID_API_KEY` — (opcional) chave SendGrid para envio de e-mails.
-- `EMAIL_FROM` — e-mail remetente verificado no provedor de e-mail.
+## 🏗️ Estrutura do Projeto
 
-## Mapa (Google Maps)
+- `app/` - Páginas e rotas (App Router)
+  - `(auth)/` - Rotas de autenticação (login, signup, forgot-password)
+  - `profile/` - Área do usuário
+  - `new-pet/` - Fluxo de cadastro de pet
+  - `map/` - Visualização do mapa
+- `components/` - Componentes React reutilizáveis
+  - `ui/` - Componentes base (Shadcn)
+- `lib/` - Utilitários e Contextos
+  - `auth-context.tsx` - Gerenciamento de estado de autenticação
+  - `api.ts` - Cliente HTTP configurado
+- `hooks/` - Custom Hooks (ex: use-toast)
 
-O projeto pode ser integrado ao Google Maps. Use `@react-google-maps/api` e coloque a chave em `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`.
+## 🤝 Integração com Backend
 
-Exemplo de instalação:
+Este frontend consome a API REST do PetFinder Backend. Certifique-se de que o backend esteja rodando para que funcionalidades como login, cadastro e listagem de pets funcionem corretamente.
 
-```powershell
-npm install @react-google-maps/api
-```
+## 📱 Telas Principais
 
-Depois crie um componente cliente que use `useJsApiLoader` e `GoogleMap`/`Marker`.
+1. **Home**: Landing page com busca rápida e destaques.
+2. **Mapa**: Visualização geoespacial dos pets.
+3. **Login/Cadastro**: Acesso seguro.
+4. **Perfil**: Gerenciamento de conta e preferências.
+5. **Novo Pet**: Formulário wizard para reportar ocorrências.
 
-## Localização do usuário
+---
 
-Existe um fluxo para obter e salvar a localização do usuário (apenas POC):
-- `app/profile/edit/page.tsx` contém um botão **Usar minha localização** que pede permissão ao navegador e envia `lat/lng` para a API interna.
-- Rota de API para salvar localizações (desenvolvimento): `POST /api/users/location`.
-- Rota de debug: `GET /api/users/location` retorna localizações salvas em memória.
-
-Observação: atualmente as localizações são armazenadas em memória (`lib/user-locations.ts`). Em produção, persista em um banco com suporte geoespacial (Postgres+PostGIS ou MongoDB 2dsphere).
-
-## Notificações por proximidade (arquitetura sugerida)
-
-Objetivo: quando um pet é publicado em uma localização, notificar usuários próximos por e-mail.
-
-Fluxo recomendado:
-1. Persistir `users.location` e `pets.location` no banco (tipo geoespacial).
-2. Ao criar um pet, executar uma consulta geoespacial (ex.: `ST_DWithin` no PostGIS) para encontrar usuários dentro do raio configurado (ex.: 5 km).
-3. Enfileirar notificações (BullMQ/Redis ou outra fila) para envio assíncrono.
-4. Enviar e-mails via provedor (SendGrid, Postmark, SES).
-
-Exemplo rápido de verificação (PostGIS):
-
-```sql
-SELECT id, email FROM users
-WHERE notify_enabled = true
-	AND ST_DWithin(location, ST_SetSRID(ST_MakePoint(:lng, :lat), 4326), :radius_meters);
-```
-
-## Endpoints adicionados (POC)
-- `POST /api/users/location` — salva { userId, lat, lng, address?, city? } (em memória).
-- `GET /api/users/location` — retorna todas as localizações salvas (debug).
-
-## Envio de e-mail (exemplo)
-
-Para enviar e-mails use um provedor como SendGrid. Exemplo mínimo (server):
-
-```ts
-// lib/email.ts (exemplo)
-import sgMail from '@sendgrid/mail'
-sgMail.setApiKey(process.env.SENDGRID_API_KEY!)
-
-export async function sendEmail({ to, subject, text, html }) {
-	await sgMail.send({ to, from: process.env.EMAIL_FROM!, subject, text, html })
-}
-```
-
-## Próximos passos sugeridos
-- Persistir localizações em banco (Postgres + PostGIS ou MongoDB).
-- Implementar fila para envio de notificações.
-- Integrar Google Maps com `@react-google-maps/api` no componente de mapa.
-
-## Contribuição
-- Faça fork, crie branch e envie PR com a mudança.
+Desenvolvido como parte do TCC - Sistema de Localização de Pets.

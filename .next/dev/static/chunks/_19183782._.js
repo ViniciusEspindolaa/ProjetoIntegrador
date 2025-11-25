@@ -1123,7 +1123,7 @@ function NotificationsPage() {
                                 id: n.id,
                                 userId: n.usuarioId,
                                 type: n.dados?.tipo || 'message',
-                                petId: n.dados?.publicacaoId ? String(n.dados.publicacaoId) : '',
+                                petId: n.dados?.publicacaoId || n.dados?.petId ? String(n.dados.publicacaoId || n.dados.petId) : '',
                                 sightingId: n.dados?.avistamentoId,
                                 title: n.titulo,
                                 message: n.corpo || '',

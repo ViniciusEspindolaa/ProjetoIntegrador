@@ -1093,6 +1093,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ui/card.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/image.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$arrow$2d$left$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ArrowLeft$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/arrow-left.js [app-client] (ecmascript) <export default as ArrowLeft>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$maximize$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Maximize2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/maximize-2.js [app-client] (ecmascript) <export default as Maximize2>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$interactive$2d$map$2e$client$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/interactive-map.client.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$contact$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/contact-dialog.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$sighting$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/sighting-dialog.tsx [app-client] (ecmascript)");
@@ -1131,6 +1132,7 @@ function PetShowPage() {
     const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
     const [contactOpen, setContactOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [sightingOpen, setSightingOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [imageOpen, setImageOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "PetShowPage.useEffect": ()=>{
             async function loadPet() {
@@ -1227,7 +1229,7 @@ function PetShowPage() {
                         className: "w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/app/pet/[id]/page.tsx",
-                        lineNumber: 106,
+                        lineNumber: 108,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1235,18 +1237,18 @@ function PetShowPage() {
                         children: "Carregando detalhes..."
                     }, void 0, false, {
                         fileName: "[project]/app/pet/[id]/page.tsx",
-                        lineNumber: 107,
+                        lineNumber: 109,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/pet/[id]/page.tsx",
-                lineNumber: 105,
+                lineNumber: 107,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/pet/[id]/page.tsx",
-            lineNumber: 104,
+            lineNumber: 106,
             columnNumber: 7
         }, this);
     }
@@ -1261,7 +1263,7 @@ function PetShowPage() {
                         children: "Publicação não encontrada"
                     }, void 0, false, {
                         fileName: "[project]/app/pet/[id]/page.tsx",
-                        lineNumber: 117,
+                        lineNumber: 119,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1269,7 +1271,7 @@ function PetShowPage() {
                         children: "Este anúncio não existe ou foi removido."
                     }, void 0, false, {
                         fileName: "[project]/app/pet/[id]/page.tsx",
-                        lineNumber: 118,
+                        lineNumber: 120,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1280,23 +1282,23 @@ function PetShowPage() {
                             children: "Voltar"
                         }, void 0, false, {
                             fileName: "[project]/app/pet/[id]/page.tsx",
-                            lineNumber: 120,
+                            lineNumber: 122,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/pet/[id]/page.tsx",
-                        lineNumber: 119,
+                        lineNumber: 121,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/pet/[id]/page.tsx",
-                lineNumber: 116,
+                lineNumber: 118,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/pet/[id]/page.tsx",
-            lineNumber: 115,
+            lineNumber: 117,
             columnNumber: 7
         }, this);
     }
@@ -1318,12 +1320,12 @@ function PetShowPage() {
                                     className: "w-5 h-5"
                                 }, void 0, false, {
                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                    lineNumber: 135,
+                                    lineNumber: 137,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/pet/[id]/page.tsx",
-                                lineNumber: 134,
+                                lineNumber: 136,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1333,7 +1335,7 @@ function PetShowPage() {
                                         children: pet.name || typeConfig[pet.type] || pet.type
                                     }, void 0, false, {
                                         fileName: "[project]/app/pet/[id]/page.tsx",
-                                        lineNumber: 138,
+                                        lineNumber: 140,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1341,39 +1343,56 @@ function PetShowPage() {
                                         children: "Detalhes da publicação"
                                     }, void 0, false, {
                                         fileName: "[project]/app/pet/[id]/page.tsx",
-                                        lineNumber: 139,
+                                        lineNumber: 141,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/pet/[id]/page.tsx",
-                                lineNumber: 137,
+                                lineNumber: 139,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/pet/[id]/page.tsx",
-                        lineNumber: 133,
+                        lineNumber: 135,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "space-y-4",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "w-full h-48 sm:h-64 relative rounded-lg overflow-hidden bg-gray-100",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                    src: pet.photoUrl || '/placeholder.svg',
-                                    alt: pet.name || 'Pet',
-                                    fill: true,
-                                    className: "object-cover"
-                                }, void 0, false, {
-                                    fileName: "[project]/app/pet/[id]/page.tsx",
-                                    lineNumber: 144,
-                                    columnNumber: 13
-                                }, this)
-                            }, void 0, false, {
+                                className: "w-full h-48 sm:h-64 relative rounded-lg overflow-hidden bg-gray-100 cursor-zoom-in group",
+                                onClick: ()=>setImageOpen(true),
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                        src: pet.photoUrl || '/placeholder.svg',
+                                        alt: pet.name || 'Pet',
+                                        fill: true,
+                                        className: "object-cover transition-transform group-hover:scale-105"
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/pet/[id]/page.tsx",
+                                        lineNumber: 149,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$maximize$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Maximize2$3e$__["Maximize2"], {
+                                            className: "w-8 h-8 text-white drop-shadow-lg"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/pet/[id]/page.tsx",
+                                            lineNumber: 156,
+                                            columnNumber: 15
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/app/pet/[id]/page.tsx",
+                                        lineNumber: 155,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/app/pet/[id]/page.tsx",
-                                lineNumber: 143,
+                                lineNumber: 145,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -1387,7 +1406,7 @@ function PetShowPage() {
                                                     children: statusConfig[pet.status].label
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                    lineNumber: 150,
+                                                    lineNumber: 163,
                                                     columnNumber: 17
                                                 }, this),
                                                 pet.reward && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1398,7 +1417,7 @@ function PetShowPage() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                    lineNumber: 153,
+                                                    lineNumber: 166,
                                                     columnNumber: 32
                                                 }, this),
                                                 pet.completed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1406,13 +1425,13 @@ function PetShowPage() {
                                                     children: "Finalizado"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                    lineNumber: 154,
+                                                    lineNumber: 167,
                                                     columnNumber: 35
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                            lineNumber: 149,
+                                            lineNumber: 162,
                                             columnNumber: 15
                                         }, this),
                                         pet.description && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1423,7 +1442,7 @@ function PetShowPage() {
                                                     children: "Descrição"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                    lineNumber: 159,
+                                                    lineNumber: 172,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1431,13 +1450,13 @@ function PetShowPage() {
                                                     children: pet.description
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                    lineNumber: 160,
+                                                    lineNumber: 173,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                            lineNumber: 158,
+                                            lineNumber: 171,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1450,7 +1469,7 @@ function PetShowPage() {
                                                             children: "Informações"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                                            lineNumber: 166,
+                                                            lineNumber: 179,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -1462,7 +1481,7 @@ function PetShowPage() {
                                                                             children: "Nome:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                            lineNumber: 168,
+                                                                            lineNumber: 181,
                                                                             columnNumber: 38
                                                                         }, this),
                                                                         " ",
@@ -1470,7 +1489,7 @@ function PetShowPage() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                    lineNumber: 168,
+                                                                    lineNumber: 181,
                                                                     columnNumber: 34
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1479,7 +1498,7 @@ function PetShowPage() {
                                                                             children: "Tipo:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                            lineNumber: 169,
+                                                                            lineNumber: 182,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         " ",
@@ -1487,7 +1506,7 @@ function PetShowPage() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                    lineNumber: 169,
+                                                                    lineNumber: 182,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 pet.age && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1496,7 +1515,7 @@ function PetShowPage() {
                                                                             children: "Idade:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                            lineNumber: 170,
+                                                                            lineNumber: 183,
                                                                             columnNumber: 37
                                                                         }, this),
                                                                         " ",
@@ -1504,7 +1523,7 @@ function PetShowPage() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                    lineNumber: 170,
+                                                                    lineNumber: 183,
                                                                     columnNumber: 33
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1513,7 +1532,7 @@ function PetShowPage() {
                                                                             children: "Cidade:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                            lineNumber: 171,
+                                                                            lineNumber: 184,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         " ",
@@ -1521,7 +1540,7 @@ function PetShowPage() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                    lineNumber: 171,
+                                                                    lineNumber: 184,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 pet.location.neighborhood && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1530,7 +1549,7 @@ function PetShowPage() {
                                                                             children: "Bairro:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                            lineNumber: 172,
+                                                                            lineNumber: 185,
                                                                             columnNumber: 55
                                                                         }, this),
                                                                         " ",
@@ -1538,7 +1557,7 @@ function PetShowPage() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                    lineNumber: 172,
+                                                                    lineNumber: 185,
                                                                     columnNumber: 51
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1547,7 +1566,7 @@ function PetShowPage() {
                                                                             children: "Endereço:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                            lineNumber: 173,
+                                                                            lineNumber: 186,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         " ",
@@ -1555,7 +1574,7 @@ function PetShowPage() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                    lineNumber: 173,
+                                                                    lineNumber: 186,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1564,7 +1583,7 @@ function PetShowPage() {
                                                                             children: "Última vista:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                            lineNumber: 174,
+                                                                            lineNumber: 187,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         " ",
@@ -1572,7 +1591,7 @@ function PetShowPage() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                    lineNumber: 174,
+                                                                    lineNumber: 187,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1581,7 +1600,7 @@ function PetShowPage() {
                                                                             children: "Criado em:"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                            lineNumber: 175,
+                                                                            lineNumber: 188,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         " ",
@@ -1589,19 +1608,19 @@ function PetShowPage() {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                    lineNumber: 175,
+                                                                    lineNumber: 188,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                                            lineNumber: 167,
+                                                            lineNumber: 180,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                    lineNumber: 165,
+                                                    lineNumber: 178,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1611,7 +1630,7 @@ function PetShowPage() {
                                                             children: "Contato"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                                            lineNumber: 180,
+                                                            lineNumber: 193,
                                                             columnNumber: 19
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1623,7 +1642,7 @@ function PetShowPage() {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                                            lineNumber: 181,
+                                                            lineNumber: 194,
                                                             columnNumber: 19
                                                         }, this),
                                                         pet.status === 'lost' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -1633,7 +1652,7 @@ function PetShowPage() {
                                                                     children: "Avistamentos"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                    lineNumber: 185,
+                                                                    lineNumber: 198,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1643,7 +1662,7 @@ function PetShowPage() {
                                                                             children: "Nenhum avistamento registrado."
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                            lineNumber: 187,
+                                                                            lineNumber: 200,
                                                                             columnNumber: 56
                                                                         }, this),
                                                                         pet.sightings.map((s)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1656,7 +1675,7 @@ function PetShowPage() {
                                                                                                 children: new Date(s.date).toLocaleDateString('pt-BR')
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                                                lineNumber: 190,
+                                                                                                lineNumber: 203,
                                                                                                 columnNumber: 76
                                                                                             }, this),
                                                                                             " ",
@@ -1664,7 +1683,7 @@ function PetShowPage() {
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                                        lineNumber: 190,
+                                                                                        lineNumber: 203,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1678,7 +1697,7 @@ function PetShowPage() {
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                                        lineNumber: 191,
+                                                                                        lineNumber: 204,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1686,7 +1705,7 @@ function PetShowPage() {
                                                                                         children: s.description
                                                                                     }, void 0, false, {
                                                                                         fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                                        lineNumber: 192,
+                                                                                        lineNumber: 205,
                                                                                         columnNumber: 29
                                                                                     }, this),
                                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1698,19 +1717,19 @@ function PetShowPage() {
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                                        lineNumber: 193,
+                                                                                        lineNumber: 206,
                                                                                         columnNumber: 29
                                                                                     }, this)
                                                                                 ]
                                                                             }, s.id, true, {
                                                                                 fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                                lineNumber: 189,
+                                                                                lineNumber: 202,
                                                                                 columnNumber: 27
                                                                             }, this))
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                                    lineNumber: 186,
+                                                                    lineNumber: 199,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             ]
@@ -1718,13 +1737,13 @@ function PetShowPage() {
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                    lineNumber: 179,
+                                                    lineNumber: 192,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                            lineNumber: 164,
+                                            lineNumber: 177,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1737,7 +1756,7 @@ function PetShowPage() {
                                                     children: "Avistar"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                    lineNumber: 204,
+                                                    lineNumber: 217,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1747,7 +1766,7 @@ function PetShowPage() {
                                                     children: "Contatar"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                    lineNumber: 208,
+                                                    lineNumber: 221,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
@@ -1757,24 +1776,24 @@ function PetShowPage() {
                                                     children: "Copiar link"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                                    lineNumber: 211,
+                                                    lineNumber: 224,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/pet/[id]/page.tsx",
-                                            lineNumber: 202,
+                                            lineNumber: 215,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                    lineNumber: 148,
+                                    lineNumber: 161,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/pet/[id]/page.tsx",
-                                lineNumber: 147,
+                                lineNumber: 160,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1787,24 +1806,24 @@ function PetShowPage() {
                                     onPetSelect: ()=>{}
                                 }, void 0, false, {
                                     fileName: "[project]/app/pet/[id]/page.tsx",
-                                    lineNumber: 219,
+                                    lineNumber: 232,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/pet/[id]/page.tsx",
-                                lineNumber: 218,
+                                lineNumber: 231,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/pet/[id]/page.tsx",
-                        lineNumber: 142,
+                        lineNumber: 144,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/pet/[id]/page.tsx",
-                lineNumber: 132,
+                lineNumber: 134,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$contact$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ContactDialog"], {
@@ -1813,7 +1832,7 @@ function PetShowPage() {
                 onClose: ()=>setContactOpen(false)
             }, void 0, false, {
                 fileName: "[project]/app/pet/[id]/page.tsx",
-                lineNumber: 224,
+                lineNumber: 237,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$sighting$2d$dialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SightingDialog"], {
@@ -1823,17 +1842,17 @@ function PetShowPage() {
                 onSubmit: handleSightingSubmit
             }, void 0, false, {
                 fileName: "[project]/app/pet/[id]/page.tsx",
-                lineNumber: 225,
+                lineNumber: 238,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/pet/[id]/page.tsx",
-        lineNumber: 130,
+        lineNumber: 132,
         columnNumber: 5
     }, this);
 }
-_s(PetShowPage, "4/H3YVbORh4BDOQATzS/VcZhpZE=", false, function() {
+_s(PetShowPage, "RXYNMf9E8hekt8b7nMYNtMcQHh8=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"],

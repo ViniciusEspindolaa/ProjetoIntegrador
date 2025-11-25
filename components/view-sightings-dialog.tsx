@@ -10,10 +10,11 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { MapPin, Calendar, Clock, User, Phone, Pencil, Trash2 } from 'lucide-react'
+import { MapPin, Calendar, Clock, User, Phone, Pencil, Trash2, Navigation } from 'lucide-react'
 import { EditSightingDialog } from './edit-sighting-dialog'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
+import { useRouter } from 'next/navigation'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,6 +36,7 @@ interface ViewSightingsDialogProps {
 export function ViewSightingsDialog({ pet, open, onClose, isOwner = false }: ViewSightingsDialogProps) {
   const [editingSighting, setEditingSighting] = useState<Sighting | null>(null)
   const [deletingSighting, setDeletingSighting] = useState<Sighting | null>(null)
+  const router = useRouter()
 
   const handleSaveSighting = (updatedSighting: Sighting) => {
     console.log('[v0] Saving sighting:', updatedSighting)
@@ -97,6 +99,21 @@ export function ViewSightingsDialog({ pet, open, onClose, isOwner = false }: Vie
                     <Phone className="w-4 h-4" />
                     {sighting.reporterPhone}
                   </div>
+                </div>
+
+                <div className="pt-2 border-t">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full text-xs"
+                    onClick={() => {
+                      router.push(`/map?petId=${pet.id}`)
+                      onClose()
+                    }}
+                  >
+                    <Navigation className="w-3 h-3 mr-2" />
+                    Ver no Mapa
+                  </Button>
                 </div>
 
                 {isOwner && (
