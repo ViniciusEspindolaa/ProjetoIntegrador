@@ -2,6 +2,7 @@ import { prisma } from "../config/prisma"
 import { Router } from 'express'
 import { z } from 'zod'
 import nodemailer from 'nodemailer'
+import { getEmailTemplate } from "../utils/emailTemplate"
 
 const router = Router()
 
@@ -39,18 +40,27 @@ async function enviaEmailEvento(nome: string, email: string, evento: any) {
     }
   });
 
-  const htmlContent = `
+  const content = `
     <h2>Olá ${nome}!</h2>
     <p>Seu evento foi criado com sucesso no PetFinder:</p>
-    <h3>${evento.titulo}</h3>
-    <p><strong>Descrição:</strong> ${evento.descricao}</p>
-    <p><strong>Local:</strong> ${evento.endereco_texto}</p>
-    <p><strong>Data de Início:</strong> ${new Date(evento.data_hora_inicio).toLocaleString('pt-BR')}</p>
-    ${evento.data_hora_fim ? `<p><strong>Data de Fim:</strong> ${new Date(evento.data_hora_fim).toLocaleString('pt-BR')}</p>` : ''}
-    ${evento.capacidade_max ? `<p><strong>Capacidade Máxima:</strong> ${evento.capacidade_max} pessoas</p>` : ''}
+    
+    <div class="info-box">
+      <h3>${evento.titulo}</h3>
+      <p><strong>Descrição:</strong> ${evento.descricao}</p>
+      <p><strong>Local:</strong> ${evento.endereco_texto}</p>
+      <p><strong>Data de Início:</strong> ${new Date(evento.data_hora_inicio).toLocaleString('pt-BR')}</p>
+      ${evento.data_hora_fim ? `<p><strong>Data de Fim:</strong> ${new Date(evento.data_hora_fim).toLocaleString('pt-BR')}</p>` : ''}
+      ${evento.capacidade_max ? `<p><strong>Capacidade Máxima:</strong> ${evento.capacidade_max} pessoas</p>` : ''}
+    </div>
+
     <p>Esperamos que seu evento seja um sucesso!</p>
-    <p>Equipe PetFinder</p>
+    
+    <div style="text-align: center;">
+      <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/eventos/${evento.id}" class="button" style="color: #ffffff;">Ver Evento</a>
+    </div>
   `;
+
+  const htmlContent = getEmailTemplate("Evento Criado com Sucesso - PetFinder", content);
 
   const info = await transporter.sendMail({
     from: 'petfinder@gmail.com',

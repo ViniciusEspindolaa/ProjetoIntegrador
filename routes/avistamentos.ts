@@ -4,6 +4,7 @@ import { prisma } from "../config/prisma"
 import { Router } from 'express'
 import { z } from 'zod'
 import nodemailer from 'nodemailer'
+import { getEmailTemplate } from "../utils/emailTemplate"
 
 const router = Router()
 
@@ -19,36 +20,45 @@ const avistamentoSchema = z.object({
   data_avistamento: z.string().datetime({ message: "Data do avistamento deve ser uma data válida" }).optional()
 })
 
+import { config } from "../config/environment"
+
 // Função para enviar email de notificação de avistamento
 async function enviaEmailAvistamento(nome: string, email: string, avistamento: any) {
   const transporter = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
-    port: 587,
-    secure: false,
+    host: config.email.host,
+    port: config.email.port,
+    secure: config.email.port === 465,
     auth: {
-      user: process.env.MAILTRAP_USER || "968f0dd8cc78d9",
-      pass: process.env.MAILTRAP_PASS || "89ed8bfbf9b7f9"
+      user: config.email.user,
+      pass: config.email.pass
     }
   });
 
-  const htmlContent = `
+  const content = `
     <h2>Olá ${nome}!</h2>
-    <p>Temos boas notícias! Há um novo avistamento relacionado à sua publicação:</p>
-    <h3>${avistamento.publicacao.titulo}</h3>
-    <div style="border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px;">
-      <h4>Detalhes do Avistamento:</h4>
+    <p>Temos boas notícias! Há um novo avistamento relacionado à sua publicação <span class="highlight">"${avistamento.publicacao.titulo}"</span>.</p>
+    
+    <div class="info-box">
+      <h3>Detalhes do Avistamento</h3>
       <p><strong>Local:</strong> ${avistamento.endereco_texto}</p>
       <p><strong>Data:</strong> ${new Date(avistamento.data_avistamento).toLocaleString('pt-BR')}</p>
       ${avistamento.observacoes ? `<p><strong>Observações:</strong> ${avistamento.observacoes}</p>` : ''}
+      <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 10px 0;">
       <p><strong>Reportado por:</strong> ${avistamento.usuario.nome}</p>
       <p><strong>Contato:</strong> ${avistamento.usuario.email}</p>
     </div>
+
     <p>Entre em contato com quem reportou o avistamento para mais informações!</p>
-    <p>Equipe PetFinder</p>
+    
+    <div style="text-align: center;">
+      <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/pet/${avistamento.publicacao.id}" class="button" style="color: #ffffff;">Ver Detalhes</a>
+    </div>
   `;
 
+  const htmlContent = getEmailTemplate("Novo Avistamento - PetFinder", content);
+
   const info = await transporter.sendMail({
-    from: 'petfinder@gmail.com',
+    from: config.email.from,
     to: email,
     subject: "Novo Avistamento - PetFinder",
     text: `Olá ${nome}, há um novo avistamento relacionado à sua publicação "${avistamento.publicacao.titulo}"!`,

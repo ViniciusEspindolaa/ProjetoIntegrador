@@ -23,6 +23,7 @@ import routesDashboard from './routes/dashboard'
 import routesMaps from './routes/maps'
 import routesUpload from './routes/upload'
 import routesAuth from './routes/auth'
+import routesDenuncias from './routes/denuncias'
 
 // Validar configurações antes de iniciar
 validateConfig()
@@ -40,6 +41,28 @@ if (validateCloudinaryConfig()) {
 
 const app = express()
 const port = config.port
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true)
+    
+    // In development, allow any localhost origin
+    if (config.nodeEnv === 'development') {
+      return callback(null, true)
+    }
+    
+    if (origin === config.frontendUrl) {
+      return callback(null, true)
+    }
+    
+    const msg = 'The CORS policy for this site does not allow access from the specified Origin.'
+    return callback(new Error(msg), false)
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}))
 
 // Middlewares de segurança
 app.use(helmet({
@@ -85,13 +108,6 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 
   next(err)
 })
-
-app.use(cors({
-  origin: config.frontendUrl,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}))
 
 // Middlewares de logging e sanitização
 app.use(loggerMiddleware)
@@ -185,6 +201,7 @@ app.use("/api/dashboard", routesDashboard)
 app.use("/api/maps", routesMaps)
 app.use("/api/upload", routesUpload)
 app.use('/api/auth', routesAuth)
+app.use('/api/denuncias', routesDenuncias)
 app.use('/api/notificacoes', notificacoesRoutes)
 app.use('/api/push', pushRoutes)
 

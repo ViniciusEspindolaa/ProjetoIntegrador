@@ -3,6 +3,10 @@ import dotenv from 'dotenv';
 import { verifyGoogleIdToken, exchangeAppleCode } from '../services/oauth';
 import { prisma as prismaClient } from '../config/prisma'
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
+import bcrypt from 'bcrypt';
+import { getEmailTemplate } from '../utils/emailTemplate';
 
 dotenv.config();
 const router = Router();
@@ -29,25 +33,144 @@ async function findOrCreateUserFromSocial(provider: string, providerId: string, 
   return user;
 }
 
-// For SPA/mobile: accept id_token from client (Google) and return project JWT
-router.post('/google/token', async (req, res) => {
+import { config } from '../config/environment';
+
+// Forgot Password
+router.post('/forgot-password', async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ erro: 'Email é obrigatório' });
+
   try {
-    const { id_token } = req.body;
-    if (!id_token) return res.status(400).json({ erro: 'id_token necessário' });
+    const user = await prismaClient.usuario.findUnique({ where: { email } });
+    if (!user) {
+      // Security: Don't reveal if user exists
+      return res.json({ message: 'Se o email existir, você receberá um link de recuperação.' });
+    }
 
-    const payload = await verifyGoogleIdToken(id_token);
-    const provider = 'google';
-    const providerId = payload?.sub as string;
-    const email = payload?.email as string | undefined;
-    const name = payload?.name as string | undefined;
+    // Generate token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetTokenExpires = new Date(Date.now() + 3600000); // 1 hour
 
-    const user = await findOrCreateUserFromSocial(provider, providerId, email, name);
+    await prismaClient.usuario.update({
+      where: { id: user.id },
+      data: {
+        resetToken,
+        resetTokenExpires
+      }
+    });
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '30d' });
-    return res.json({ token, user });
-  } catch (err: any) {
-    console.error('google/token error', err?.message || err);
-    return res.status(500).json({ erro: 'erro ao verificar token google', details: err?.message });
+    // Send email
+    const transporter = nodemailer.createTransport({
+      host: config.email.host,
+      port: config.email.port,
+      secure: config.email.port === 465,
+      auth: {
+        user: config.email.user,
+        pass: config.email.pass
+      }
+    });
+
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
+    
+    const content = `
+      <h2>Recuperação de Senha</h2>
+      <p>Você solicitou a recuperação de senha para sua conta no PetFinder.</p>
+      <p>Clique no botão abaixo para criar uma nova senha:</p>
+      <div style="text-align: center;">
+        <a href="${resetUrl}" class="button" style="color: #ffffff;">Redefinir Senha</a>
+      </div>
+      <p>Se você não solicitou isso, ignore este email.</p>
+      <p>O link expira em 1 hora.</p>
+    `;
+
+    const html = getEmailTemplate('Recuperação de Senha', content);
+
+    await transporter.sendMail({
+      from: config.email.from,
+      to: email,
+      subject: 'Recuperação de Senha - PetFinder',
+      html
+    });
+
+    res.json({ message: 'Se o email existir, você receberá um link de recuperação.' });
+
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ erro: 'Erro ao processar solicitação' });
+  }
+});
+
+// Reset Password
+router.post('/reset-password', async (req, res) => {
+  const { token, newPassword } = req.body;
+  if (!token || !newPassword) return res.status(400).json({ erro: 'Token e nova senha são obrigatórios' });
+
+  try {
+    const user = await prismaClient.usuario.findFirst({
+      where: {
+        resetToken: token,
+        resetTokenExpires: {
+          gt: new Date()
+        }
+      }
+    });
+
+    if (!user) {
+      return res.status(400).json({ erro: 'Token inválido ou expirado' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await prismaClient.usuario.update({
+      where: { id: user.id },
+      data: {
+        senha: hashedPassword,
+        resetToken: null,
+        resetTokenExpires: null
+      }
+    });
+
+    res.json({ message: 'Senha alterada com sucesso' });
+
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ erro: 'Erro ao redefinir senha' });
+  }
+});
+
+// For SPA/mobile: accept id_token from client (Google) and return project JWT
+router.post('/google', async (req, res) => {
+  const { idToken } = req.body;
+  if (!idToken) return res.status(400).json({ erro: 'idToken é obrigatório' });
+
+  try {
+    const payload = await verifyGoogleIdToken(idToken);
+    if (!payload) return res.status(401).json({ erro: 'Token inválido' });
+
+    const { sub, email, name, picture } = payload;
+    
+    const user = await findOrCreateUserFromSocial('google', sub, email, name);
+    
+    // Generate JWT
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      user: {
+        id: user.id,
+        name: user.nome,
+        email: user.email,
+        photoUrl: picture, // Google picture
+      },
+      token
+    });
+
+  } catch (error) {
+    console.error('Google auth error:', error);
+    res.status(401).json({ erro: 'Falha na autenticação com Google' });
   }
 });
 

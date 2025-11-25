@@ -262,4 +262,62 @@ router.put("/:id", async (req, res) => {
   }
 })
 
+router.patch("/:id/password", async (req, res) => {
+  const { id } = req.params
+  const { senhaAtual, novaSenha } = req.body
+
+  if (!senhaAtual || !novaSenha) {
+    res.status(400).json({ erro: "Senha atual e nova senha são obrigatórias" })
+    return
+  }
+
+  try {
+    const usuario = await prisma.usuario.findUnique({ where: { id } })
+    if (!usuario) {
+      res.status(404).json({ erro: "Usuário não encontrado" })
+      return
+    }
+
+    const senhaCorreta = bcrypt.compareSync(senhaAtual, usuario.senha)
+    if (!senhaCorreta) {
+      res.status(400).json({ erro: "Senha atual incorreta" })
+      return
+    }
+
+    const erros = validaSenha(novaSenha)
+    if (erros.length > 0) {
+      res.status(400).json({ erro: erros.join("; ") })
+      return
+    }
+
+    const salt = bcrypt.genSaltSync(12)
+    const hash = bcrypt.hashSync(novaSenha, salt)
+
+    await prisma.usuario.update({
+      where: { id },
+      data: { senha: hash }
+    })
+
+    res.status(200).json({ mensagem: "Senha atualizada com sucesso" })
+  } catch (error) {
+    logger.error('Erro ao atualizar senha', { error })
+    res.status(500).json({ erro: "Erro interno ao atualizar senha" })
+  }
+})
+
+router.patch("/:id/config", async (req, res) => {
+  const { id } = req.params
+  const { configuracoes } = req.body
+
+  try {
+    const usuario = await prisma.usuario.update({
+      where: { id },
+      data: { configuracoes }
+    })
+    res.status(200).json(usuario)
+  } catch (error) {
+    res.status(400).json(error)
+  }
+})
+
 export default router

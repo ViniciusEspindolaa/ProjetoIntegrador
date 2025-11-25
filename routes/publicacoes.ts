@@ -3,6 +3,7 @@ import { Router } from "express"
 import { z } from 'zod'
 import nodemailer from "nodemailer"
 import { uploadPetPhotos, handleUploadError, extractFileInfo } from "../middleware/upload"
+import { getEmailTemplate } from "../utils/emailTemplate"
 
 const router = Router()
 
@@ -30,6 +31,7 @@ const petPerdidoSchema = publicacaoBaseSchema.extend({
   cor: z.string().max(20).optional(),
   sexo: z.enum(["MACHO", "FEMEA", "INDEFINIDO"]).optional(),
   idade: z.number().min(0).optional(),
+  unidadeIdade: z.enum(["ANOS", "MESES"]).optional(),
   recompensa: z.number().min(0).nullable().optional(),
   // aceita string ISO ou número (timestamp) e converte para Date
   data_evento: z.preprocess((arg) => {
@@ -45,6 +47,7 @@ const petEncontradoSchema = publicacaoBaseSchema.extend({
   cor: z.string().max(20).optional(),
   sexo: z.enum(["MACHO", "FEMEA", "INDEFINIDO"]).optional(),
   idade: z.number().min(0).optional(),
+  unidadeIdade: z.enum(["ANOS", "MESES"]).optional(),
   data_evento: z.preprocess((arg) => {
     if (typeof arg === 'string' || typeof arg === 'number') return new Date(arg as any)
     return arg
@@ -58,7 +61,8 @@ const petAdocaoSchema = publicacaoBaseSchema.extend({
   porte: z.enum(["PEQUENO", "MEDIO", "GRANDE"]).optional(),
   cor: z.string().max(20).optional(),
   sexo: z.enum(["MACHO", "FEMEA", "INDEFINIDO"]).optional(),
-  idade: z.number().min(0, { message: "Idade é obrigatória para adoção" })
+  idade: z.number().min(0, { message: "Idade é obrigatória para adoção" }),
+  unidadeIdade: z.enum(["ANOS", "MESES"]).optional()
 })
 
 const petResgateSchema = publicacaoBaseSchema.extend({
@@ -67,7 +71,8 @@ const petResgateSchema = publicacaoBaseSchema.extend({
   porte: z.enum(["PEQUENO", "MEDIO", "GRANDE"]).optional(),
   cor: z.string().max(20).optional(),
   sexo: z.enum(["MACHO", "FEMEA", "INDEFINIDO"]).optional(),
-  idade: z.number().min(0).optional()
+  idade: z.number().min(0).optional(),
+  unidadeIdade: z.enum(["ANOS", "MESES"]).optional()
 })
 
 // Função para validar baseada no tipo
@@ -125,41 +130,8 @@ router.post("/", async (req, res) => {
       console.error("Erro ao enviar email de confirmação:", emailError);
     }
 
-    // Notificar usuários próximos por email (não bloqueante)
-    (async () => {
-      try {
-        const raio_km = 5 // raio padrão para notificação
-        const lat = Number(publicacao.latitude)
-        const lng = Number(publicacao.longitude)
-
-        // Cálculo aproximado de graus por km (1 grau ≈ 111km)
-        const deltaLat = raio_km / 111
-        const deltaLng = raio_km / (111 * Math.cos(lat * Math.PI / 180))
-
-        // Buscar usuários com localização definida dentro da bbox
-        const candidatos = await prisma.usuario.findMany({
-          where: {
-            AND: [
-              { id: { not: publicacao.usuarioId } },
-              { latitude: { not: null } },
-              { longitude: { not: null } },
-              { latitude: { gte: lat - deltaLat, lte: lat + deltaLat } },
-              { longitude: { gte: lng - deltaLng, lte: lng + deltaLng } }
-            ]
-          }
-        })
-
-        // Filtrar por distância real (Haversine) e enviar email
-        for (const u of candidatos) {
-          const distancia = haversineKm(lat, lng, Number(u.latitude), Number(u.longitude))
-          if (distancia <= raio_km) {
-            await enviaEmailNotificacao(u.nome, u.email, publicacao)
-          }
-        }
-      } catch (err) {
-        console.error('Erro ao notificar usuários próximos:', err)
-      }
-    })()
+    // Notificar usuários próximos (não bloqueante)
+    notificarUsuariosProximos(publicacao);
 
     res.status(201).json(publicacao)
   } catch (error) {
@@ -167,14 +139,88 @@ router.post("/", async (req, res) => {
   }
 })
 
+async function notificarUsuariosProximos(publicacao: any) {
+  try {
+    // Raio máximo de busca inicial (para garantir que pegamos usuários com raio personalizado)
+    const MAX_SEARCH_RADIUS_KM = 50 
+    
+    const lat = Number(publicacao.latitude)
+    const lng = Number(publicacao.longitude)
+
+    // Cálculo aproximado de graus por km (1 grau ≈ 111km)
+    const deltaLat = MAX_SEARCH_RADIUS_KM / 111
+    const deltaLng = MAX_SEARCH_RADIUS_KM / (111 * Math.cos(lat * Math.PI / 180))
+
+    // Buscar usuários com localização definida dentro da bbox expandida
+    const candidatos = await prisma.usuario.findMany({
+      where: {
+        AND: [
+          { id: { not: publicacao.usuarioId } },
+          { latitude: { not: null } },
+          { longitude: { not: null } },
+          { latitude: { gte: lat - deltaLat, lte: lat + deltaLat } },
+          { longitude: { gte: lng - deltaLng, lte: lng + deltaLng } }
+        ]
+      },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        latitude: true,
+        longitude: true,
+        configuracoes: true // Importante: buscar as configurações
+      }
+    })
+
+    // Filtrar por distância real (Haversine) considerando o raio de CADA usuário
+    for (const u of candidatos) {
+      const distancia = haversineKm(lat, lng, Number(u.latitude), Number(u.longitude))
+      
+      // Obter raio de alerta do usuário ou usar padrão (10km)
+      const userConfig = u.configuracoes as any
+      const userRadius = userConfig?.alertRadius ? Number(userConfig.alertRadius) : 10
+      
+      // Verificar se o usuário quer receber notificações de pets próximos
+      const notifyNearby = userConfig?.notifyNearby !== false // Default true
+
+      if (notifyNearby && distancia <= userRadius) {
+        // 1. Envia Email
+        await enviaEmailNotificacao(u.nome, u.email, publicacao)
+
+        // 2. Cria Notificação no Banco
+        await prisma.notificacao.create({
+          data: {
+            usuarioId: u.id,
+            titulo: `Novo pet perdido próximo a você!`,
+            corpo: `Um ${publicacao.especie.toLowerCase()} foi perdido a ${distancia.toFixed(1)}km de você. Ajude a encontrar!`,
+            lida: false,
+            canal: 'APP',
+            dados: {
+              type: 'nearby',
+              petId: String(publicacao.id),
+              latitude: publicacao.latitude,
+              longitude: publicacao.longitude,
+              distancia: distancia
+            }
+          }
+        })
+      }
+    }
+  } catch (err) {
+    console.error('Erro ao notificar usuários próximos:', err)
+  }
+}
+
+import { config } from "../config/environment"
+
 async function enviaEmail(nome: string, email: string, tipo: 'confirmacao' | 'avistamento', dados: any) {
   const transporter = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
-    port: 587,
-    secure: false,
+    host: config.email.host,
+    port: config.email.port,
+    secure: config.email.port === 465, // true for 465, false for other ports
     auth: {
-      user: process.env.MAILTRAP_USER || "968f0dd8cc78d9",
-      pass: process.env.MAILTRAP_PASS || "89ed8bfbf9b7f9"
+      user: config.email.user,
+      pass: config.email.pass
     }
   });
 
@@ -185,39 +231,58 @@ async function enviaEmail(nome: string, email: string, tipo: 'confirmacao' | 'av
   if (tipo === 'confirmacao') {
     subject = "Confirmação de Publicação - PetFinder";
     textContent = `Olá ${nome}, sua publicação "${dados.titulo}" foi criada com sucesso!`;
-    htmlContent = `
+    
+    const content = `
       <h2>Olá ${nome}!</h2>
-      <p>Sua publicação foi criada com sucesso no PetFinder:</p>
-      <h3>${dados.titulo}</h3>
-      <p><strong>Descrição:</strong> ${dados.descricao}</p>
-      <p><strong>Localização:</strong> ${dados.endereco_texto}</p>
-      ${dados.especie ? `<p><strong>Espécie:</strong> ${dados.especie}</p>` : ''}
-      ${dados.nome_pet ? `<p><strong>Nome do Pet:</strong> ${dados.nome_pet}</p>` : ''}
+      <p>Sua publicação foi criada com sucesso no PetFinder.</p>
+      
+      <div class="info-box">
+        <h3>${dados.titulo}</h3>
+        <p><strong>Descrição:</strong> ${dados.descricao}</p>
+        <p><strong>Localização:</strong> ${dados.endereco_texto}</p>
+        ${dados.especie ? `<p><strong>Espécie:</strong> ${dados.especie}</p>` : ''}
+        ${dados.nome_pet ? `<p><strong>Nome do Pet:</strong> ${dados.nome_pet}</p>` : ''}
+      </div>
+
       <p>Esperamos que você encontre seu pet em breve!</p>
-      <p>Equipe PetFinder</p>
+      
+      <div style="text-align: center;">
+        <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/pet/${dados.id}" class="button" style="color: #ffffff;">Ver Publicação</a>
+      </div>
     `;
+    
+    htmlContent = getEmailTemplate(subject, content);
+
   } else if (tipo === 'avistamento') {
     subject = "Novo Avistamento - PetFinder";
     textContent = `Olá ${nome}, há um novo avistamento relacionado à sua publicação "${dados.publicacao.titulo}"!`;
-    htmlContent = `
+    
+    const content = `
       <h2>Olá ${nome}!</h2>
-      <p>Temos boas notícias! Há um novo avistamento relacionado à sua publicação:</p>
-      <h3>${dados.publicacao.titulo}</h3>
-      <div style="border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px;">
-        <h4>Detalhes do Avistamento:</h4>
+      <p>Temos boas notícias! Há um novo avistamento relacionado à sua publicação <span class="highlight">"${dados.publicacao.titulo}"</span>.</p>
+      
+      <div class="info-box">
+        <h3>Detalhes do Avistamento</h3>
         <p><strong>Local:</strong> ${dados.publicacao.endereco_texto}</p>
         <p><strong>Data:</strong> ${new Date(dados.data_avistamento).toLocaleString('pt-BR')}</p>
         ${dados.observacoes ? `<p><strong>Observações:</strong> ${dados.observacoes}</p>` : ''}
+        <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 10px 0;">
         <p><strong>Reportado por:</strong> ${dados.usuario.nome}</p>
-        <p><strong>Contato:</strong> ${dados.usuario.email} - ${dados.usuario.telefone}</p>
+        <p><strong>Contato:</strong> ${dados.usuario.email} ${dados.usuario.telefone ? `- ${dados.usuario.telefone}` : ''}</p>
       </div>
+
       <p>Entre em contato com quem reportou o avistamento para mais informações!</p>
-      <p>Equipe PetFinder</p>
+      
+      <div style="text-align: center;">
+        <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/pet/${dados.publicacao.id}" class="button" style="color: #ffffff;">Ver Detalhes</a>
+      </div>
     `;
+
+    htmlContent = getEmailTemplate(subject, content);
   }
 
   const info = await transporter.sendMail({
-    from: 'petfinder@gmail.com',
+    from: config.email.from,
     to: email,
     subject: subject,
     text: textContent,
@@ -230,29 +295,37 @@ async function enviaEmail(nome: string, email: string, tipo: 'confirmacao' | 'av
 // Envia email de notificação para usuários próximos a uma publicação
 async function enviaEmailNotificacao(nome: string, email: string, publicacao: any) {
   const transporter = nodemailer.createTransport({
-    host: "sandbox.smtp.mailtrap.io",
-    port: 587,
-    secure: false,
+    host: config.email.host,
+    port: config.email.port,
+    secure: config.email.port === 465,
     auth: {
-      user: process.env.MAILTRAP_USER || "968f0dd8cc78d9",
-      pass: process.env.MAILTRAP_PASS || "89ed8bfbf9b7f9"
+      user: config.email.user,
+      pass: config.email.pass
     }
   });
 
   const subject = `Novo anúncio próximo a você - ${publicacao.titulo}`;
-  const htmlContent = `
+  
+  const content = `
     <h2>Olá ${nome}!</h2>
     <p>Foi publicado um novo anúncio próximo à sua localização que pode te interessar:</p>
-    <h3>${publicacao.titulo}</h3>
-    <p><strong>Descrição:</strong> ${publicacao.descricao}</p>
-    <p><strong>Local:</strong> ${publicacao.endereco_texto}</p>
-    <p><a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/publicacao/${publicacao.id}">Ver detalhe da publicação</a></p>
-    <p>Equipe PetFinder</p>
+    
+    <div class="info-box">
+      <h3>${publicacao.titulo}</h3>
+      <p><strong>Descrição:</strong> ${publicacao.descricao}</p>
+      <p><strong>Local:</strong> ${publicacao.endereco_texto}</p>
+    </div>
+
+    <div style="text-align: center;">
+      <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/pet/${publicacao.id}" class="button" style="color: #ffffff;">Ver Publicação</a>
+    </div>
   `;
+
+  const htmlContent = getEmailTemplate(subject, content);
 
   try {
     const info = await transporter.sendMail({
-      from: 'petfinder@gmail.com',
+      from: config.email.from,
       to: email,
       subject,
       text: `Há um novo anúncio próximo a você: ${publicacao.titulo}`,
@@ -300,10 +373,15 @@ router.get("/usuario/:usuarioId", async (req, res) => {
 })
 
 
-// Rota GET principal - buscar todas as publicações
+// Rota GET principal - buscar todas as publicações (exceto finalizadas)
 router.get("/", async (req, res) => {
   try {
     const publicacoes = await prisma.publicacao.findMany({
+      where: {
+        status: {
+          not: 'RESOLVIDO'
+        }
+      },
       include: {
         usuario: true,
         avistamentos: {
@@ -365,8 +443,16 @@ router.get("/buscar", async (req, res) => {
       }
     }
     if (sexo) filtros.sexo = sexo as string
-    if (tipo) filtros.tipo = tipo as string
-    if (status) filtros.status = status as string
+    // Filtro por status
+    if (status) {
+      filtros.status = status as string
+    } else {
+      // Se não especificar status, exclui os resolvidos por padrão
+      filtros.status = {
+        not: 'RESOLVIDO'
+      }
+    }
+
     if (usuarioId) filtros.usuarioId = usuarioId as string
 
     // Filtro por localização (busca no endereço)
@@ -484,6 +570,9 @@ router.get("/buscar/proximidade", async (req, res) => {
         longitude: {
           gte: lng - deltaLng,
           lte: lng + deltaLng
+        },
+        status: {
+          not: 'RESOLVIDO'
         }
       },
       include: {
@@ -764,6 +853,7 @@ router.post("/com-fotos", (req, res) => {
         cidade: req.body.cidade || undefined,
         longitude: parseFloat(req.body.longitude),
         idade: req.body.idade ? parseInt(req.body.idade) : undefined,
+        unidadeIdade: req.body.unidadeIdade || 'ANOS',
         recompensa: req.body.recompensa ? parseFloat(req.body.recompensa) : undefined,
         // Converter data
         data_evento: req.body.data_evento ? new Date(req.body.data_evento) : new Date()
@@ -799,6 +889,9 @@ router.post("/com-fotos", (req, res) => {
         console.error("Erro ao enviar email:", emailError);
         // Não falhar a criação da publicação por erro de email
       }
+
+      // Notificar usuários próximos (não bloqueante)
+      notificarUsuariosProximos(publicacao);
 
       res.status(201).json({
         ...publicacao,
@@ -860,6 +953,7 @@ router.put("/:id", (req, res) => {
       if (req.body.latitude) dadosAtualizacao.latitude = parseFloat(req.body.latitude);
       if (req.body.longitude) dadosAtualizacao.longitude = parseFloat(req.body.longitude);
       if (req.body.idade) dadosAtualizacao.idade = parseInt(req.body.idade);
+      if (req.body.unidadeIdade) dadosAtualizacao.unidadeIdade = req.body.unidadeIdade;
       
       // Handle reward update (including removal)
       if (req.body.recompensa !== undefined && req.body.recompensa !== null && req.body.recompensa !== '') {
@@ -909,6 +1003,101 @@ router.put("/:id", (req, res) => {
     }
   });
 });
+
+// Função para enviar email de confirmação de finalização
+async function enviaEmailFinalizacao(nome: string, email: string, publicacao: any, motivo: string) {
+  const transporter = nodemailer.createTransport({
+    host: config.email.host,
+    port: config.email.port,
+    secure: config.email.port === 465,
+    auth: {
+      user: config.email.user,
+      pass: config.email.pass
+    }
+  });
+
+  const subject = "Publicação Finalizada - PetFinder";
+  
+  const content = `
+    <h2>Olá ${nome}!</h2>
+    <p>Sua publicação foi finalizada com sucesso.</p>
+    
+    <div class="info-box">
+      <h3>${publicacao.titulo}</h3>
+      <p><strong>Motivo:</strong> ${motivo}</p>
+      <p><strong>Data de Finalização:</strong> ${new Date().toLocaleString('pt-BR')}</p>
+    </div>
+
+    <p>Ficamos felizes em ajudar! Se precisar de mais alguma coisa, conte conosco.</p>
+    
+    <div style="text-align: center;">
+      <a href="${process.env.FRONTEND_URL || 'http://localhost:3000'}/pet/${publicacao.id}" class="button" style="color: #ffffff;">Ver Publicação</a>
+    </div>
+  `;
+
+  const htmlContent = getEmailTemplate(subject, content);
+
+  try {
+    const info = await transporter.sendMail({
+      from: config.email.from,
+      to: email,
+      subject: subject,
+      html: htmlContent
+    });
+    console.log("Email de finalização enviado: %s", info.messageId);
+  } catch (err) {
+    console.error('Erro ao enviar email de finalização:', err);
+  }
+}
+
+// Rota para finalizar publicação
+router.patch("/:id/finalizar", async (req, res) => {
+  const { id } = req.params
+  const { motivo } = req.body
+
+  if (!motivo) {
+    return res.status(400).json({ erro: "Motivo é obrigatório" })
+  }
+
+  try {
+    const publicacao = await prisma.publicacao.findUnique({
+      where: { id: Number(id) }
+    })
+
+    if (!publicacao) {
+      return res.status(404).json({ erro: "Publicação não encontrada" })
+    }
+
+    const publicacaoAtualizada = await prisma.publicacao.update({
+      where: { id: Number(id) },
+      data: {
+        status: 'RESOLVIDO',
+        motivo_encerramento: motivo,
+        recompensa: null // Remove recompensa se houver, pois foi finalizado
+      },
+      include: {
+        usuario: true
+      }
+    })
+
+    // Enviar email de confirmação
+    try {
+      await enviaEmailFinalizacao(
+        publicacaoAtualizada.usuario.nome,
+        publicacaoAtualizada.usuario.email,
+        publicacaoAtualizada,
+        motivo
+      );
+    } catch (emailError) {
+      console.error("Erro ao enviar email de finalização:", emailError);
+    }
+
+    res.status(200).json(publicacaoAtualizada)
+  } catch (error) {
+    console.error("Erro ao finalizar publicação:", error)
+    res.status(500).json({ erro: "Erro interno ao finalizar publicação" })
+  }
+})
 
 export default router
 

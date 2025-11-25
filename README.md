@@ -2,15 +2,21 @@
 
 Sistema backend completo para localização e gerenciamento de pets perdidos, encontrados e adoção com integração Google Maps.
 
-## ✨ **STATUS: PRONTA PARA PRODUÇÃO!** ✨
+## ✨ **STATUS: MVP COMPLETO (TCC)** ✨
 
 ## 🚀 Funcionalidades
 
+- **🔐 Autenticação Avançada**:
+  - Login/Cadastro com JWT
+  - **Google OAuth 2.0** (Login Social)
+  - **Recuperação de Senha** (Token via Email)
 - **👥 Usuários**: Cadastro, login e gerenciamento de perfis com JWT
 - **📋 Publicações**: Pets perdidos, encontrados, para adoção e resgates
 - **👁️ Avistamentos**: Sistema de reportar avistamentos de pets
 - **🎉 Eventos**: Criação e gerenciamento de eventos relacionados a pets
-- **🗺️ Google Maps**: Geocodificação, busca por proximidade, mapas estáticos
+- **🗺️ Geolocalização**: 
+  - Cálculo de distância (Haversine) e suporte a Google Maps
+  - **Geofencing**: Sistema de alertas baseado na localização em tempo real do usuário
 - **📊 Dashboard**: Estatísticas e métricas do sistema
 - **📧 Email**: Notificações automáticas por email
 - **🖼️ Upload Cloudinary**: Sistema profissional de upload com otimização automática
@@ -27,7 +33,7 @@ Sistema backend completo para localização e gerenciamento de pets perdidos, en
 - **JWT** - Autenticação e tokens
 - **Cloudinary** - Upload e armazenamento de imagens
 - **Mailtrap** - Testes de email (desenvolvimento)
-- **Google Maps API** - Geolocalização
+- **Google Maps API** (Opcional) - Geolocalização
 - **Swagger** - Documentação interativa da API
 - **Winston** - Sistema de logs estruturados
 - **Helmet** + **Express Rate Limit** - Segurança
