@@ -16,6 +16,7 @@
     "db:seed": "npx ts-node prisma/seed.ts",
     "logs:clean": "rm -rf logs/*.log",
     "setup": "npm install && npx prisma generate && cp .env.example .env",
+    "postinstall": "npx prisma generate",
     "deploy:dev": "bash deploy.sh development",
     "deploy:prod": "bash deploy.sh producao",
     "docker:build": "docker build -t petfinder-api .",

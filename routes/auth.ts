@@ -33,8 +33,6 @@ async function findOrCreateUserFromSocial(provider: string, providerId: string, 
   return user;
 }
 
-import { config } from '../config/environment';
-
 // Forgot Password
 router.post('/forgot-password', async (req, res) => {
   const { email } = req.body;
@@ -61,12 +59,12 @@ router.post('/forgot-password', async (req, res) => {
 
     // Send email
     const transporter = nodemailer.createTransport({
-      host: config.email.host,
-      port: config.email.port,
-      secure: config.email.port === 465,
+      host: "sandbox.smtp.mailtrap.io",
+      port: 587,
+      secure: false,
       auth: {
-        user: config.email.user,
-        pass: config.email.pass
+        user: process.env.MAILTRAP_USER || "968f0dd8cc78d9",
+        pass: process.env.MAILTRAP_PASS || "89ed8bfbf9b7f9"
       }
     });
 
@@ -86,7 +84,7 @@ router.post('/forgot-password', async (req, res) => {
     const html = getEmailTemplate('Recuperação de Senha', content);
 
     await transporter.sendMail({
-      from: config.email.from,
+      from: 'petfinder@gmail.com',
       to: email,
       subject: 'Recuperação de Senha - PetFinder',
       html

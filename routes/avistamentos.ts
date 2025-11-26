@@ -20,17 +20,15 @@ const avistamentoSchema = z.object({
   data_avistamento: z.string().datetime({ message: "Data do avistamento deve ser uma data válida" }).optional()
 })
 
-import { config } from "../config/environment"
-
 // Função para enviar email de notificação de avistamento
 async function enviaEmailAvistamento(nome: string, email: string, avistamento: any) {
   const transporter = nodemailer.createTransport({
-    host: config.email.host,
-    port: config.email.port,
-    secure: config.email.port === 465,
+    host: "sandbox.smtp.mailtrap.io",
+    port: 587,
+    secure: false,
     auth: {
-      user: config.email.user,
-      pass: config.email.pass
+      user: process.env.MAILTRAP_USER || "968f0dd8cc78d9",
+      pass: process.env.MAILTRAP_PASS || "89ed8bfbf9b7f9"
     }
   });
 
@@ -58,7 +56,7 @@ async function enviaEmailAvistamento(nome: string, email: string, avistamento: a
   const htmlContent = getEmailTemplate("Novo Avistamento - PetFinder", content);
 
   const info = await transporter.sendMail({
-    from: config.email.from,
+    from: 'petfinder@gmail.com',
     to: email,
     subject: "Novo Avistamento - PetFinder",
     text: `Olá ${nome}, há um novo avistamento relacionado à sua publicação "${avistamento.publicacao.titulo}"!`,

@@ -211,16 +211,14 @@ async function notificarUsuariosProximos(publicacao: any) {
   }
 }
 
-import { config } from "../config/environment"
-
 async function enviaEmail(nome: string, email: string, tipo: 'confirmacao' | 'avistamento', dados: any) {
   const transporter = nodemailer.createTransport({
-    host: config.email.host,
-    port: config.email.port,
-    secure: config.email.port === 465, // true for 465, false for other ports
+    host: "sandbox.smtp.mailtrap.io",
+    port: 587,
+    secure: false,
     auth: {
-      user: config.email.user,
-      pass: config.email.pass
+      user: process.env.MAILTRAP_USER || "968f0dd8cc78d9",
+      pass: process.env.MAILTRAP_PASS || "89ed8bfbf9b7f9"
     }
   });
 
@@ -282,7 +280,7 @@ async function enviaEmail(nome: string, email: string, tipo: 'confirmacao' | 'av
   }
 
   const info = await transporter.sendMail({
-    from: config.email.from,
+    from: 'petfinder@gmail.com',
     to: email,
     subject: subject,
     text: textContent,
@@ -295,12 +293,12 @@ async function enviaEmail(nome: string, email: string, tipo: 'confirmacao' | 'av
 // Envia email de notificação para usuários próximos a uma publicação
 async function enviaEmailNotificacao(nome: string, email: string, publicacao: any) {
   const transporter = nodemailer.createTransport({
-    host: config.email.host,
-    port: config.email.port,
-    secure: config.email.port === 465,
+    host: "sandbox.smtp.mailtrap.io",
+    port: 587,
+    secure: false,
     auth: {
-      user: config.email.user,
-      pass: config.email.pass
+      user: process.env.MAILTRAP_USER || "968f0dd8cc78d9",
+      pass: process.env.MAILTRAP_PASS || "89ed8bfbf9b7f9"
     }
   });
 
@@ -325,7 +323,7 @@ async function enviaEmailNotificacao(nome: string, email: string, publicacao: an
 
   try {
     const info = await transporter.sendMail({
-      from: config.email.from,
+      from: 'petfinder@gmail.com',
       to: email,
       subject,
       text: `Há um novo anúncio próximo a você: ${publicacao.titulo}`,
@@ -1007,12 +1005,12 @@ router.put("/:id", (req, res) => {
 // Função para enviar email de confirmação de finalização
 async function enviaEmailFinalizacao(nome: string, email: string, publicacao: any, motivo: string) {
   const transporter = nodemailer.createTransport({
-    host: config.email.host,
-    port: config.email.port,
-    secure: config.email.port === 465,
+    host: "sandbox.smtp.mailtrap.io",
+    port: 587,
+    secure: false,
     auth: {
-      user: config.email.user,
-      pass: config.email.pass
+      user: process.env.MAILTRAP_USER || "968f0dd8cc78d9",
+      pass: process.env.MAILTRAP_PASS || "89ed8bfbf9b7f9"
     }
   });
 
@@ -1039,7 +1037,7 @@ async function enviaEmailFinalizacao(nome: string, email: string, publicacao: an
 
   try {
     const info = await transporter.sendMail({
-      from: config.email.from,
+      from: 'petfinder@gmail.com',
       to: email,
       subject: subject,
       html: htmlContent

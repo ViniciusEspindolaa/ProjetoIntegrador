@@ -274,19 +274,25 @@ process.on('unhandledRejection', (reason, promise) => {
   process.exit(1)
 })
 
-app.listen(port, () => {
-  logger.info(`🐕 Servidor PetFinder iniciado com sucesso`, {
-    port,
-    environment: config.nodeEnv,
-    nodeVersion: process.version
+// Export app for Vercel
+export default app
+
+// Only start server if running directly
+if (require.main === module) {
+  app.listen(port, () => {
+    logger.info(`🐕 Servidor PetFinder iniciado com sucesso`, {
+      port,
+      environment: config.nodeEnv,
+      nodeVersion: process.version
+    })
+    
+    console.log(`🚀 PetFinder API rodando em http://localhost:${port}`)
+    console.log(`📊 Health check: http://localhost:${port}/health`)
+    console.log(`📖 API Info: http://localhost:${port}/api`)
+    
+    if (config.nodeEnv === 'development') {
+      console.log(`🔧 Ambiente: ${config.nodeEnv}`)
+      console.log(`📝 Logs: salvos em /logs/`)
+    }
   })
-  
-  console.log(`🚀 PetFinder API rodando em http://localhost:${port}`)
-  console.log(`📊 Health check: http://localhost:${port}/health`)
-  console.log(`📖 API Info: http://localhost:${port}/api`)
-  
-  if (config.nodeEnv === 'development') {
-    console.log(`🔧 Ambiente: ${config.nodeEnv}`)
-    console.log(`📝 Logs: salvos em /logs/`)
-  }
-})
+}
