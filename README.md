@@ -150,18 +150,6 @@ Formato de um pino de mapa (rastreamento) com uma pegada de animal no centro (co
 
 ---
 
-## 🏗️ Estrutura de Dados e Diagramas
-O projeto conta com documentação visual da arquitetura:
-
-*   **🧩 Diagrama de Casos de Uso:** Mapeia as interações do Ator "Usuário" com o sistema (CRUD Publicação, Avistamento, Denúncia, Configurações).
-*   **🗂️ Diagrama Entidade-Relacionamento (DER):**
-    *   **Usuário:** Dados pessoais e localização.
-    *   **Publicação:** Detalhes do pet, localização e status.
-    *   **Avistamento:** Relacionado ao usuário e à publicação.
-    *   **Denúncia, Notificação e SocialAccount.**
-
----
-
 ## 💰 Modelo de Negócios
 *   **Inicial:** Anúncios de maneira não agressiva.
 *   **Futuro:** Taxas sobre serviços oferecidos no sistema com a expansão da plataforma.
