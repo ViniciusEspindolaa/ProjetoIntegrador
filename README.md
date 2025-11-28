@@ -112,6 +112,18 @@ O desenvolvimento foi guiado pelas dores e objetivos de três perfis principais:
 
 ---
 
+## 🏗️ Estrutura de Dados e Diagramas
+
+* * 🧩 Diagrama de Casos de Uso
+
+![Diagrama de Casos de Uso](./img/UseCaseDiagram1.jpg)
+
+* * 🗂️ Diagrama Entidade-Relacionamento
+
+![Diagrama Entidade-Relacionamento](./img/diagramaER.png)
+
+---
+
 ## 🎨 Identidade Visual
 
 ### Logo
@@ -141,8 +153,8 @@ Formato de um pino de mapa (rastreamento) com uma pegada de animal no centro (co
 ## 🏗️ Estrutura de Dados e Diagramas
 O projeto conta com documentação visual da arquitetura:
 
-*   **Diagrama de Casos de Uso:** Mapeia as interações do Ator "Usuário" com o sistema (CRUD Publicação, Avistamento, Denúncia, Configurações).
-*   **Diagrama Entidade-Relacionamento (DER):**
+*   **🧩 Diagrama de Casos de Uso:** Mapeia as interações do Ator "Usuário" com o sistema (CRUD Publicação, Avistamento, Denúncia, Configurações).
+*   **🗂️ Diagrama Entidade-Relacionamento (DER):**
     *   **Usuário:** Dados pessoais e localização.
     *   **Publicação:** Detalhes do pet, localização e status.
     *   **Avistamento:** Relacionado ao usuário e à publicação.
