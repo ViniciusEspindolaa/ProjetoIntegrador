@@ -114,11 +114,11 @@ O desenvolvimento foi guiado pelas dores e objetivos de três perfis principais:
 
 ## 🏗️ Estrutura de Dados e Diagramas
 
-* * 🧩 Diagrama de Casos de Uso
+* **🧩 Diagrama de Casos de Uso**
 
 ![Diagrama de Casos de Uso](./img/UseCaseDiagram1.jpg)
 
-* * 🗂️ Diagrama Entidade-Relacionamento
+* **🗂️ Diagrama Entidade-Relacionamento**
 
 ![Diagrama Entidade-Relacionamento](./img/diagramaER.png)
 
