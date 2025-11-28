@@ -7,7 +7,7 @@ O **PetFinder** é uma plataforma desenvolvida para auxiliar na reunião entre p
 
 Este projeto faz parte da disciplina de **Projeto de Desenvolvimento I** da **UniSenac Pelotas**, sob orientação do professor **Angelo Luz**.
 
-🔗 **Acesse o projeto:** [https://petfinder-self.vercel.app](https://petfinder-self.vercel.app) / [GitHub](https://github.com/ViniciusEspindolaa/ProjetoIntegrador) / GitLab (https://gitlab.com/senac-projetos-de-desenvolvimento/2025-vinicius-schmalfuss-espindola/petfinder)
+🔗 **Acesse o projeto:** [PetFinder](https://petfinder-self.vercel.app) / [GitHub](https://github.com/ViniciusEspindolaa/ProjetoIntegrador) / [GitLab](https://gitlab.com/senac-projetos-de-desenvolvimento/2025-vinicius-schmalfuss-espindola/petfinder)
 
 ---
 
