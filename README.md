@@ -124,10 +124,10 @@ Formato de um pino de mapa (rastreamento) com uma pegada de animal no centro (co
 
 ![Paleta de Cores PetFinder](./img/paleta.png)
 
-**Azul Meia-Noite** Tecnologia, seriedade e confiança. Reduz cansaço visual.
-**Verde Menta** Esperança e serenidade. Contraponto emocional ao estresse.
-**Laranja Solar** Energia e alerta. Usado em botões de ação sem causar pânico.
-**Branco** Clareza e limpeza. Fundo do sistema.
+* **Azul Meia-Noite** Tecnologia, seriedade e confiança. Reduz cansaço visual.
+* **Verde Menta** Esperança e serenidade. Contraponto emocional ao estresse.
+* **Laranja Solar** Energia e alerta. Usado em botões de ação sem causar pânico.
+* **Branco** Clareza e limpeza. Fundo do sistema.
 
 ### Fontes
 
